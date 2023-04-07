@@ -20,6 +20,7 @@ public:
     };
     void update();
     void draw();
+    void print();
 };
 
 void Wrapper::init()
@@ -66,4 +67,10 @@ void Wrapper::update()
     glBindVertexArray(vao);
     draw();
     glBindVertexArray(0);
+}
+
+void Wrapper::print(){
+    std::cout << "vao:" << vao << std::endl;
+    std::cout << "vbo:" << vbo << std::endl;
+    std::cout << "vertices:" << vertices.at(1).coords[0] << std::endl;
 }

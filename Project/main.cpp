@@ -1,4 +1,4 @@
-#include "../include/wrapper.hpp"
+#include "./include/wrapper.hpp"
 #include "glimac/default_shader.hpp"
 #include "p6/p6.h"
 
@@ -19,6 +19,7 @@ int main()
 
 
     Wrapper triangle;
+    triangle.print();
 
     // GLuint vbo = 0;
     // glGenBuffers(1, &vbo);

@@ -4,38 +4,49 @@
 
 class Wrapper {
 private:
-    GLuint vao;
-    GLuint vbo;
+    GLuint       vao                  = 0;
+    GLuint       vbo                  = 0;
+    const GLuint VERTEX_ATTR_POSITION = 3;
+    const GLuint VERTEX_ATTR_COLOR    = 8;
 
 public:
     std::vector<Vertex3D> vertices;
     void                  init();
     Wrapper() { init(); };
+    ~Wrapper()
+    {
+        glDeleteBuffers(1, &vbo);
+        glDeleteVertexArrays(1, &vao);
+    };
     void update();
     void draw();
 };
 
 void Wrapper::init()
 {
-    GLuint vbo = 0;
+    struct Vertex3D v1 = {glm::vec3(-0.5f, -0.5f, 0.f), glm::vec3(1.f, 0.5f, 0.f)};
+    struct Vertex3D v2 = {glm::vec3(0.5f, -0.5f, 0.f), glm::vec3(0.f, 1.f, 0.5f)};
+    struct Vertex3D v3 = {glm::vec3(0.0f, 0.5f, 0.f), glm::vec3(0.f, 0.5f, 1.f)};
+    vertices.push_back(v1);
+    vertices.push_back(v2);
+    vertices.push_back(v3);
+
     glGenBuffers(1, &vbo);
-
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
-
     glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vertex3D), &vertices.front(), GL_STATIC_DRAW);
-
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-    GLuint vao = 0;
     glGenVertexArrays(1, &vao);
 
     glBindVertexArray(vao);
 
-    const GLuint VERTEX_ATTR_POSITION = 0;
     glEnableVertexAttribArray(VERTEX_ATTR_POSITION);
+    glEnableVertexAttribArray(VERTEX_ATTR_COLOR);
 
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    glVertexAttribPointer(VERTEX_ATTR_POSITION, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), 0);
+    glVertexAttribPointer(VERTEX_ATTR_POSITION, 3, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), 0);
+    glVertexAttribPointer(VERTEX_ATTR_COLOR, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (const GLvoid*)(2 * sizeof(GLfloat)));
+
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 
     glBindVertexArray(0);
@@ -43,7 +54,7 @@ void Wrapper::init()
 
 void Wrapper::draw()
 {
-    glDrawArrays(GL_TRIANGLES, 0, 3);
+    glDrawArrays(GL_TRIANGLES, 0, vertices.size());
 }
 
 void Wrapper::update()
@@ -55,10 +66,4 @@ void Wrapper::update()
     glBindVertexArray(vao);
     draw();
     glBindVertexArray(0);
-}
-
-void Wrapper() // desctructor
-{
-    glDeleteBuffers(1, &vbo);
-    glDeleteVertexArrays(1, &vao);
 }

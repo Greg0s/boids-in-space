@@ -4,12 +4,19 @@
 
 int main()
 {
+    // const p6::Shader shader = p6::load_shader(
+    //     "shaders/shader.vs.glsl",
+    //     "shaders/shader.fs.glsl"
+    // );
+
     auto ctx = p6::Context{{1280, 720, "TP3 EX1"}};
     ctx.maximize_window();
 
     /*********************************
      * HERE SHOULD COME THE INITIALIZATION CODE
      *********************************/
+
+
 
     Wrapper triangle;
 
@@ -45,6 +52,8 @@ int main()
          * HERE SHOULD COME THE RENDERING CODE
          *********************************/
         triangle.update();
+
+
         // glimac::bind_default_shader();
 
         // glClearColor(1.f, 0.5f, 0.5f, 1.f); // background color

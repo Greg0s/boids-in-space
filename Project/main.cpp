@@ -4,13 +4,13 @@
 
 int main()
 {
-    // const p6::Shader shader = p6::load_shader(
-    //     "shaders/shader.vs.glsl",
-    //     "shaders/shader.fs.glsl"
-    // );
-
     auto ctx = p6::Context{{1280, 720, "TP3 EX1"}};
     ctx.maximize_window();
+
+    const p6::Shader shader = p6::load_shader(
+        "shaders/shader.vs.glsl",
+        "shaders/shader.fs.glsl"
+    );
 
     /*********************************
      * HERE SHOULD COME THE INITIALIZATION CODE
@@ -18,12 +18,21 @@ int main()
 
     Wrapper triangle;
 
-    struct Vertex3D v1 = {glm::vec3(-0.5f, -0.5f, 0.f), glm::vec3(1.f, 0.5f, 0.f)};
-    struct Vertex3D v2 = {glm::vec3(0.5f, -0.5f, 0.f), glm::vec3(0.f, 1.f, 0.5f)};
-    struct Vertex3D v3 = {glm::vec3(0.0f, 0.5f, 0.f), glm::vec3(0.f, 0.5f, 1.f)};
+    struct Vertex3D v1 = {glm::vec3(0.f, 0.f, 0.f), glm::vec3(1.f, 0.5f, 0.f)};
+    struct Vertex3D v2 = {glm::vec3(-0.5f, 0.f, 0.f), glm::vec3(0.f, 1.f, 0.5f)};
+    struct Vertex3D v3 = {glm::vec3(-0.5f, 0.5f, 0.f), glm::vec3(0.f, 0.5f, 1.f)};
+    struct Vertex3D v4 = {glm::vec3(0.0f, 0.5f, 0.f), glm::vec3(0.f, 0.5f, 1.f)};
     triangle.vertices.push_back(v1);
     triangle.vertices.push_back(v2);
     triangle.vertices.push_back(v3);
+    triangle.vertices.push_back(v4);
+
+    triangle.indices.push_back(0);
+    triangle.indices.push_back(1);
+    triangle.indices.push_back(2);
+    triangle.indices.push_back(0);
+    triangle.indices.push_back(2);
+    triangle.indices.push_back(3);
 
     triangle.init();
 
@@ -57,10 +66,12 @@ int main()
 
     // Declare your infinite update loop.
     ctx.update = [&]() {
+        shader.use();
+
         /*********************************
          * HERE SHOULD COME THE RENDERING CODE
          *********************************/
-        glimac::bind_default_shader();
+        // glimac::bind_default_shader();
         triangle.update();
 
         // glimac::bind_default_shader();

@@ -16,10 +16,18 @@ int main()
      * HERE SHOULD COME THE INITIALIZATION CODE
      *********************************/
 
-
-
     Wrapper triangle;
-    triangle.print();
+
+    struct Vertex3D v1 = {glm::vec3(-0.5f, -0.5f, 0.f), glm::vec3(1.f, 0.5f, 0.f)};
+    struct Vertex3D v2 = {glm::vec3(0.5f, -0.5f, 0.f), glm::vec3(0.f, 1.f, 0.5f)};
+    struct Vertex3D v3 = {glm::vec3(0.0f, 0.5f, 0.f), glm::vec3(0.f, 0.5f, 1.f)};
+    triangle.vertices.push_back(v1);
+    triangle.vertices.push_back(v2);
+    triangle.vertices.push_back(v3);
+
+    triangle.init();
+
+    // triangle.print();
 
     // GLuint vbo = 0;
     // glGenBuffers(1, &vbo);
@@ -52,8 +60,8 @@ int main()
         /*********************************
          * HERE SHOULD COME THE RENDERING CODE
          *********************************/
+        glimac::bind_default_shader();
         triangle.update();
-
 
         // glimac::bind_default_shader();
 
@@ -69,4 +77,5 @@ int main()
 
     // Should be done last. It starts the infinite loop.
     ctx.start();
+    triangle.clear();
 }

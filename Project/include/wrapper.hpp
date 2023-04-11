@@ -13,15 +13,16 @@ public:
     std::vector<Vertex3D> vertices;
     void                  init();
     // Wrapper() { init(); };
-    // ~Wrapper()
-    // {
-    //     glDeleteBuffers(1, &vbo);
-    //     glDeleteVertexArrays(1, &vao);
-    // };
+    ~Wrapper()
+    {
+        glDeleteBuffers(1, &vbo);
+        glDeleteVertexArrays(1, &vao);
+        std::cout << "yo";
+    };
     void update();
     // void draw();
     void print();
-    void clear();
+    // void clear();
 };
 
 void Wrapper::init()
@@ -70,8 +71,8 @@ void Wrapper::print()
     std::cout << "vertices:" << vertices.at(1).coords[0] << std::endl;
 }
 
-void Wrapper::clear()
-{
-    glDeleteBuffers(1, &vbo);
-    glDeleteVertexArrays(1, &vao);
-}
+// void Wrapper::clear()
+// {
+//     glDeleteBuffers(1, &vbo);
+//     glDeleteVertexArrays(1, &vao);
+// }

@@ -77,5 +77,5 @@ int main()
 
     // Should be done last. It starts the infinite loop.
     ctx.start();
-    triangle.clear();
+    // triangle.clear();
 }

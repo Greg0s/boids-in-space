@@ -1,5 +1,8 @@
 #include "./include/wrapper.hpp"
 #include "glimac/default_shader.hpp"
+#include "glm/ext/matrix_clip_space.hpp"
+#include "glm/ext/matrix_transform.hpp"
+#include "glm/fwd.hpp"
 #include "p6/p6.h"
 
 int main()
@@ -64,9 +67,27 @@ int main()
 
     /*********************/
 
+    // matrice de projection, permet de delimiter champ qu'on voit, fait perspective
+    // perspective(fov, aspect ratio fenetre,distance min, distance max)
+    glm::mat4 projection = glm::perspective(glm::radians(45.f), static_cast<float>(1280) / static_cast<float>(720), 0.001f, 100.0f);
+
     // Declare your infinite update loop.
     ctx.update = [&]() {
         shader.use();
+        // envoie matrice au shader
+        shader.set("projection", projection);
+
+        // "world", translation/rotation etc d'un objet
+        // rotate(matrice courante (identité car c'est la 1ère transfo), rotation, axe autour duquel se fait rotation)
+        glm::mat4 model = glm::rotate(glm::mat4(1.0f), glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+        // model = glm::translate(model, )
+        // matrice normale, définit où va être cam
+        // lookAt(pos ete, centre d'ou tu regarde, où est le haut)
+        // fc fait en sorte que l'horizon est tjrs droit
+        glm::mat4 view = glm::lookAt({0.25, 0.5, 0.25}, glm::vec3(0), {0, 1, 0});
+
+        shader.set("model", model);
+        shader.set("view", view);
 
         /*********************************
          * HERE SHOULD COME THE RENDERING CODE

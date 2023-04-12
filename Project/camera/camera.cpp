@@ -1,10 +1,5 @@
 #include "camera.hpp"
-
-Camera::Camera(glm::vec3 coords)
-    : m_coords({0., 0., 0.})
-{
-    m_coords = coords;
-}
+#include "glm/fwd.hpp"
 
 void Camera::setDistance(float dist)
 {
@@ -18,16 +13,22 @@ float Camera::getDistance()
 
 void Camera::setHeight(float height)
 {
-    m_height = height;
+    m_coords[2] = height;
 }
 
 float Camera::getHeight()
 {
-    return m_height;
+    return m_coords[2];
 }
 
 void Camera::calCoords(glm::vec3 mainPos)
 {
     glm::vec2 pos(mainPos - m_distance);
-    m_coords = {pos, m_height};
+    // m_coords = {pos, m_height};
+    m_coords = {pos, m_coords[2]};
+}
+
+glm::vec3 Camera::getCoords()
+{
+    return m_coords;
 }

@@ -6,7 +6,7 @@ void Camera::setDistance(float dist)
     m_distance = dist;
 }
 
-float Camera::getDistance()
+float Camera::getDistance() const
 {
     return m_distance;
 }
@@ -21,11 +21,11 @@ float Camera::getHeight()
     return m_coords[2];
 }
 
-void Camera::calCoords(glm::vec3 mainPos)
+void Camera::calCoords(glm::vec3 playerPos)
 {
-    glm::vec2 pos(mainPos - m_distance);
-    // m_coords = {pos, m_height};
-    m_coords = {pos, m_coords[2]};
+    // glm::vec2 pos(mainPos.x - m_distance, );
+    //  m_coords = {pos, m_height};
+    m_coords = {playerPos.x - m_distance, m_height, playerPos.z};
 }
 
 glm::vec3 Camera::getCoords()

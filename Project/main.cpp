@@ -1,5 +1,6 @@
 #include "./camera/camera.hpp"
 #include "./include/wrapper.hpp"
+#include "./player/player.hpp"
 #include "glimac/default_shader.hpp"
 #include "glm/ext/matrix_clip_space.hpp"
 #include "glm/ext/matrix_transform.hpp"
@@ -73,8 +74,9 @@ int main()
     glm::mat4 projection = glm::perspective(glm::radians(45.f), static_cast<float>(1280) / static_cast<float>(720), 0.001f, 100.0f);
 
     Camera camera;
+    Player player;
 
-    glm::vec3 posTest(0.25, 0.5, 0.25); // pos pour simuler perso qu'on suit
+    // glm::vec3 posTest(0.25, 0.5, 0.25); // pos pour simuler perso qu'on suit
 
     // Declare your infinite update loop.
     ctx.update = [&]() {
@@ -83,8 +85,7 @@ int main()
         shader.set("projection", projection);
 
         // camera.setDistance(camera.getDistance() + 0.01);
-        posTest += glm::vec3(0.1, 0.1, 0.);
-        camera.calCoords(posTest);
+        // posTest += glm::vec3(0.1, 0.1, 0.);
 
         // "world", translation/rotation etc d'un objet
         // rotate(matrice courante (identité car c'est la 1ère transfo), rotation, axe autour duquel se fait rotation)
@@ -93,7 +94,9 @@ int main()
         // matrice normale, définit où va être cam
         // lookAt(pos ete, centre d'ou tu regarde, où est le haut)
         // fc fait en sorte que l'horizon est tjrs droit
-        glm::mat4 view = glm::lookAt(camera.getCoords(), glm::vec3(0), {0, 1, 0});
+        camera.calCoords(player.getPos());
+
+        glm::mat4 view = glm::lookAt(camera.getCoords(), player.getPos(), {0, 1, 0});
 
         shader.set("model", model);
         shader.set("view", view);
@@ -103,6 +106,22 @@ int main()
          *********************************/
         // glimac::bind_default_shader();
         triangle.update();
+        if (ctx.key_is_pressed(GLFW_KEY_W))
+        {
+            player.goForward();
+        }
+        if (ctx.key_is_pressed(GLFW_KEY_S))
+        {
+            player.goBackward();
+        }
+        if (ctx.key_is_pressed(GLFW_KEY_A))
+        {
+            player.goLeft();
+        }
+        if (ctx.key_is_pressed(GLFW_KEY_D))
+        {
+            player.goRight();
+        }
 
         // glimac::bind_default_shader();
 

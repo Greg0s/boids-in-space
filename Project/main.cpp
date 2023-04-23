@@ -21,51 +21,33 @@ int main()
      * HERE SHOULD COME THE INITIALIZATION CODE
      *********************************/
 
-    Wrapper triangle;
+    Wrapper ground;
 
-    struct Vertex3D v1 = {glm::vec3(0.f, 0.f, 0.f), glm::vec3(1.f, 0.5f, 0.f)};
-    struct Vertex3D v2 = {glm::vec3(-0.5f, 0.f, 0.f), glm::vec3(0.f, 1.f, 0.5f)};
-    struct Vertex3D v3 = {glm::vec3(-0.5f, 0.5f, 0.f), glm::vec3(0.f, 0.5f, 1.f)};
-    struct Vertex3D v4 = {glm::vec3(0.0f, 0.5f, 0.f), glm::vec3(0.f, 0.5f, 1.f)};
-    triangle.vertices.push_back(v1);
-    triangle.vertices.push_back(v2);
-    triangle.vertices.push_back(v3);
-    triangle.vertices.push_back(v4);
+    struct Vertex3D g1 = {glm::vec3(0.f, 0.f, 0.f), glm::vec3(1.f, 0.5f, 0.f)};
+    struct Vertex3D g2 = {glm::vec3(-0.5f, 0.f, 0.f), glm::vec3(0.f, 1.f, 0.5f)};
+    struct Vertex3D g3 = {glm::vec3(-0.5f, 0.5f, 0.f), glm::vec3(0.f, 0.5f, 1.f)};
+    struct Vertex3D g4 = {glm::vec3(0.0f, 0.5f, 0.f), glm::vec3(0.f, 0.5f, 1.f)};
+    ground.vertices.push_back(g1);
+    ground.vertices.push_back(g2);
+    ground.vertices.push_back(g3);
+    ground.vertices.push_back(g4);
 
-    triangle.indices.push_back(0);
-    triangle.indices.push_back(1);
-    triangle.indices.push_back(2);
-    triangle.indices.push_back(0);
-    triangle.indices.push_back(2);
-    triangle.indices.push_back(3);
+    ground.indices.push_back(0);
+    ground.indices.push_back(1);
+    ground.indices.push_back(2);
+    ground.indices.push_back(0);
+    ground.indices.push_back(2);
+    ground.indices.push_back(3);
 
-    triangle.init();
+    ground.init();
 
-    // triangle.print();
+    // Wrapper player;
 
-    // GLuint vbo = 0;
-    // glGenBuffers(1, &vbo);
+    // struct Vertex3D p1 = {glm::vec3(0.f, 0.f, 0.f), glm::vec3(1.f, 1.f, 1.f)};
+    // struct Vertex3D p2 = {glm::vec3(-0.01f, 0.f, 0.f), glm::vec3(1.f, 1.f, 1.f)};
+    // struct Vertex3D p3 = {glm::vec3(-0.01f, 0.01f, 0.f), glm::vec3(1.f, 1.f, 1.f)};
+    // struct Vertex3D p4 = {glm::vec3(0.0f, 0.01f, 0.f), glm::vec3(1.f, 1.f, 1.f)};
 
-    // glBindBuffer(GL_ARRAY_BUFFER, vbo);
-
-    // GLfloat vertices[] = {-0.5f, -0.5f, 0.5f, -0.5f, 0.0f, 0.5f};
-    // glBufferData(GL_ARRAY_BUFFER, 6 * sizeof(GLfloat), vertices, GL_STATIC_DRAW);
-
-    // glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-    // GLuint vao = 0;
-    // glGenVertexArrays(1, &vao);
-
-    // glBindVertexArray(vao);
-
-    // const GLuint VERTEX_ATTR_POSITION = 0;
-    // glEnableVertexAttribArray(VERTEX_ATTR_POSITION);
-
-    // glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    // glVertexAttribPointer(VERTEX_ATTR_POSITION, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), 0);
-    // glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-    // glBindVertexArray(0);
 
     /*********************/
 
@@ -75,8 +57,6 @@ int main()
 
     Camera camera;
     Player player;
-
-    // glm::vec3 posTest(0.25, 0.5, 0.25); // pos pour simuler perso qu'on suit
 
     // Declare your infinite update loop.
     ctx.update = [&]() {
@@ -105,7 +85,9 @@ int main()
          * HERE SHOULD COME THE RENDERING CODE
          *********************************/
         // glimac::bind_default_shader();
-        triangle.update();
+
+        ground.update();
+
         if (ctx.key_is_pressed(GLFW_KEY_W))
         {
             player.goForward();
@@ -123,15 +105,6 @@ int main()
             player.goRight();
         }
 
-        // glimac::bind_default_shader();
-
-        // glClearColor(1.f, 0.5f, 0.5f, 1.f); // background color
-
-        // glClear(GL_COLOR_BUFFER_BIT);
-
-        // glBindVertexArray(vao);
-        // glDrawArrays(GL_TRIANGLES, 0, 3);
-        // glBindVertexArray(0);
         /*********************************/
     };
 

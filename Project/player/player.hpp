@@ -16,4 +16,6 @@ public:
     void goBackward();
     void goLeft();
     void goRight();
+    // void rotateRight();
+    // void rotateLeft();
 };

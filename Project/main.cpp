@@ -1,4 +1,6 @@
+#include <fstream>
 #include "./camera/camera.hpp"
+#include "./gltf/gltf.hpp"
 #include "./include/wrapper.hpp"
 #include "./player/player.hpp"
 #include "glimac/default_shader.hpp"
@@ -48,7 +50,6 @@ int main()
     // struct Vertex3D p3 = {glm::vec3(-0.01f, 0.01f, 0.f), glm::vec3(1.f, 1.f, 1.f)};
     // struct Vertex3D p4 = {glm::vec3(0.0f, 0.01f, 0.f), glm::vec3(1.f, 1.f, 1.f)};
 
-
     /*********************/
 
     // matrice de projection, permet de delimiter champ qu'on voit, fait perspective
@@ -57,6 +58,10 @@ int main()
 
     Camera camera;
     Player player;
+
+    std::string fileGLTF = "/home/gregoire/Documents/imac_openGLBoidsS4/assets/rake.gltf";
+
+    Gltf rake(fileGLTF.c_str());
 
     // Declare your infinite update loop.
     ctx.update = [&]() {
@@ -80,6 +85,8 @@ int main()
 
         shader.set("model", model);
         shader.set("view", view);
+
+        rake.draw();
 
         /*********************************
          * HERE SHOULD COME THE RENDERING CODE

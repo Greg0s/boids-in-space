@@ -1,7 +1,7 @@
 #include <fstream>
 #include "./camera/camera.hpp"
-#include "./gltf/gltf.hpp"
 #include "./include/wrapper.hpp"
+#include "./loaderGLTF/Model.h"
 #include "./player/player.hpp"
 #include "glimac/default_shader.hpp"
 #include "glm/ext/matrix_clip_space.hpp"
@@ -9,14 +9,39 @@
 #include "glm/fwd.hpp"
 #include "p6/p6.h"
 
+void moveListener(const p6::Context& ctx, Player& player)
+{
+    if (ctx.key_is_pressed(GLFW_KEY_W))
+    {
+        player.goForward();
+    }
+    if (ctx.key_is_pressed(GLFW_KEY_S))
+    {
+        player.goBackward();
+    }
+    if (ctx.key_is_pressed(GLFW_KEY_A))
+    {
+        player.goLeft();
+    }
+    if (ctx.key_is_pressed(GLFW_KEY_D))
+    {
+        player.goRight();
+    }
+}
+
 int main()
 {
-    auto ctx = p6::Context{{1280, 720, "TP3 EX1"}};
+    auto ctx = p6::Context{{1280, 720, "Boids in space"}};
     ctx.maximize_window();
 
     const p6::Shader shader = p6::load_shader(
         "shaders/shader.vs.glsl",
         "shaders/shader.fs.glsl"
+    );
+
+    const p6::Shader shaderGLTF = p6::load_shader(
+        "shaders/gltf.vs.glsl",
+        "shaders/gltf.fs.glsl"
     );
 
     /*********************************
@@ -59,9 +84,12 @@ int main()
     Camera camera;
     Player player;
 
-    std::string fileGLTF = "/home/gregoire/Documents/imac_openGLBoidsS4/assets/rake.gltf";
+    glm::vec3 lightColor(1, 0.92, 0.85);
+    glm::vec3 lightPosition(0, 100, 0);
 
-    Gltf rake(fileGLTF.c_str());
+    std::string fileGLTF = "./assets/models/drone.gltf";
+
+    Model cube(fileGLTF.c_str());
 
     // Declare your infinite update loop.
     ctx.update = [&]() {
@@ -86,31 +114,24 @@ int main()
         shader.set("model", model);
         shader.set("view", view);
 
-        rake.draw();
+        ground.update();
+
+        moveListener(ctx, player);
+
+        shaderGLTF.use();
+        shaderGLTF.set("view", view);
+        shaderGLTF.set("projection", projection);
+        shaderGLTF.set("model", model);
+        shaderGLTF.set("lightColor", lightColor);
+        shaderGLTF.set("lightPosition", lightPosition);
+        shaderGLTF.set("camPos", camera.getCoords());
+
+        cube.Draw(shaderGLTF.id());
 
         /*********************************
          * HERE SHOULD COME THE RENDERING CODE
          *********************************/
         // glimac::bind_default_shader();
-
-        ground.update();
-
-        if (ctx.key_is_pressed(GLFW_KEY_W))
-        {
-            player.goForward();
-        }
-        if (ctx.key_is_pressed(GLFW_KEY_S))
-        {
-            player.goBackward();
-        }
-        if (ctx.key_is_pressed(GLFW_KEY_A))
-        {
-            player.goLeft();
-        }
-        if (ctx.key_is_pressed(GLFW_KEY_D))
-        {
-            player.goRight();
-        }
 
         /*********************************/
     };

@@ -6,7 +6,9 @@
 class Player {
 private:
     glm::vec3 m_pos = {0., 0., 0.};
-    glm::vec3 m_dir = {0.01, 0.01, 0.01};
+    glm::vec3 m_dir = {1.f, 1.f, 1.f};
+
+    float m_speed = 0.01;
 
 public:
     glm::vec3 getPos();
@@ -18,4 +20,8 @@ public:
     void goRight();
     // void rotateRight();
     // void rotateLeft();
+
+    // void move();
+
+    void draw(const p6::Shader& shaderGLTF);
 };

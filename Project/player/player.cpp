@@ -49,7 +49,7 @@ void Player::goRight()
 //     m_pos = m_dir * m_speed;
 // }
 
-void Player::draw(const p6::Shader& shaderGLTF)
+void Player::draw(const p6::Shader& shaderGLTF) const
 {
     std::string fileGLTF = "./assets/models/drone.gltf";
     Model       player(fileGLTF.c_str());

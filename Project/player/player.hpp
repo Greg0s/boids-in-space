@@ -23,5 +23,5 @@ public:
 
     // void move();
 
-    void draw(const p6::Shader& shaderGLTF);
+    void draw(const p6::Shader& shaderGLTF) const;
 };

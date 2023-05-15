@@ -87,10 +87,6 @@ int main()
     glm::vec3 lightColor(1, 0.92, 0.85);
     glm::vec3 lightPosition(0, 100, 0);
 
-    std::string fileGLTF = "./assets/models/drone.gltf";
-
-    Model cube(fileGLTF.c_str());
-
     // Declare your infinite update loop.
     ctx.update = [&]() {
         shader.use();
@@ -126,7 +122,9 @@ int main()
         shaderGLTF.set("lightPosition", lightPosition);
         shaderGLTF.set("camPos", camera.getCoords());
 
-        cube.Draw(shaderGLTF.id());
+        player.draw(shaderGLTF);
+
+        // cube.Draw(shaderGLTF.id());
 
         /*********************************
          * HERE SHOULD COME THE RENDERING CODE

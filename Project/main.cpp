@@ -1,5 +1,5 @@
 #include <fstream>
-#include "./boid/boid.hpp"
+// #include "./boid/boid.hpp"
 #include "./camera/camera.hpp"
 #include "./include/wrapper.hpp"
 #include "./loaderGLTF/Model.h"
@@ -9,62 +9,6 @@
 #include "glm/ext/matrix_transform.hpp"
 #include "glm/fwd.hpp"
 #include "p6/p6.h"
-
-struct strengths {
-    const float boundsStrength     = 1;
-    float       separationStrength = 0.04; // 2
-    float       alignementStrength = 0.03; // 5
-    float       cohesionStrength   = 0.01; // 5
-};
-
-struct scopes {
-    float       scope     = 0.5;
-    const float wallScope = 0.1;
-};
-
-glm::vec2 randomPos(glm::vec2 squareSize, float size)
-{
-    glm::vec2 pos;
-    return pos = p6::random::point(
-               {
-                   -squareSize.x + size,
-                   -squareSize.y + size,
-               },
-               {
-                   squareSize.x - size,
-                   squareSize.y - size,
-               }
-           );
-}
-
-std::vector<Boid> boidsVec(size_t nbSquare, glm::vec2 squareSize, float size)
-{
-    std::vector<Boid> boids;
-
-    glm::vec3 pos;
-    glm::vec3 direction;
-    // glm::vec3 speed = {0.008, 0.008, 0.008};
-
-    // création du vector des boids
-    for (size_t i = 0; i < nbSquare; i++)
-    {
-        // square appears only in the square = center of the square
-        pos = {randomPos(squareSize, size), 1.};
-
-        // squares have a random direction
-        direction = {p6::random::direction(), 1.};
-
-        // create the boid of the square i
-        Boid boid;
-
-        // add this boid to the others
-        boids.push_back(boid);
-
-        // print pos for debug
-        // std::cout << "pos : " << pos.x << " " << pos.y << std::endl;
-    }
-    return boids;
-}
 
 void moveListener(const p6::Context& ctx, Player& player)
 {
@@ -84,14 +28,18 @@ void moveListener(const p6::Context& ctx, Player& player)
     {
         player.goRight();
     }
+    if (ctx.key_is_pressed(GLFW_KEY_LEFT_SHIFT))
+    {
+        player.goUp();
+    }
+    if (ctx.key_is_pressed(GLFW_KEY_LEFT_CONTROL))
+    {
+        player.goDown();
+    }
 }
 
 int main()
 {
-    // Const declaration
-    scopes    scopes;
-    strengths strengths;
-
     auto ctx = p6::Context{{1280, 720, "Boids in space"}};
     ctx.maximize_window();
 

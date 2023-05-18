@@ -34,6 +34,16 @@ void Player::goRight()
     m_pos.z += m_speed;
 }
 
+void Player::goUp()
+{
+    m_pos.y += m_speed;
+}
+
+void Player::goDown()
+{
+    m_pos.y -= m_speed;
+}
+
 // void Player::rotateRight()
 // {
 //     m_dir.z += incrementUnit;

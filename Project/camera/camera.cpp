@@ -25,7 +25,7 @@ void Camera::calCoords(glm::vec3 playerPos)
 {
     // glm::vec2 pos(mainPos.x - m_distance, );
     //  m_coords = {pos, m_height};
-    m_coords = {playerPos.x - m_distance, m_height, playerPos.z};
+    m_coords = {playerPos.x - m_distance, playerPos.y + m_height, playerPos.z};
 }
 
 glm::vec3 Camera::getCoords()

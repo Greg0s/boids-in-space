@@ -18,6 +18,8 @@ public:
     void goBackward();
     void goLeft();
     void goRight();
+    void goUp();
+    void goDown();
     // void rotateRight();
     // void rotateLeft();
 

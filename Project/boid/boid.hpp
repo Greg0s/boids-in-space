@@ -6,14 +6,17 @@
 class Boid {
 private:
     glm::vec3 m_pos   = {0., 0., 0.};
-    glm::vec3 m_dir   = {1., 1., 1.};
-    glm::vec3 m_speed = {0., 0., 0.};
+    glm::vec3 m_dir   = {0., 0., 0.};
+    glm::vec3 m_speed = {0.01, 0.01, 0.01};
 
     void setPosition(const glm::vec2& newPos);
     void setDirectionX(const float& dirX);
     void setDirectionY(const float& dirY);
 
 public:
+    explicit Boid(glm::vec3 position, glm::vec3 direction, glm::vec3 speed)
+        : m_pos(position), m_dir(direction), m_speed(speed){};
+
     glm::vec3 getPosition() const;
     glm::vec3 getDirection() const;
     glm::vec3 getSpeed() const;
@@ -31,5 +34,5 @@ public:
     void alignementForce(const std::vector<Boid>& boids, const float& scope, const float& strength);
     void cohesionForce(const std::vector<Boid>& boids, const float& scope, const float& strength);
 
-    static void update(std::vector<Boid> boids, scopes scopes, strengths strengths)
+    void draw(const p6::Shader& shaderGLTF) const;
 };

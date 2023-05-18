@@ -171,27 +171,11 @@ void Boid::draw(const p6::Shader& shaderGLTF)
 
     glm::mat4 base = glm::mat4(1.f);
     base           = glm::translate(base, glm::vec3(m_pos.x, m_pos.y, m_pos.z));
+    //  pour tester que affichage gltf boid fonctionne
+    // base = glm::translate(base, glm::vec3(0.1, 0, 0));
 
-    base = glm::scale(base, glm::vec3(0.01));
+    base = glm::scale(base, glm::vec3(0.008));
 
     shaderGLTF.set("model", base);
     boid.Draw(shaderGLTF.id());
-}
-
-static void Boid::update(std::vector<Boid> boids, scopes scopes, strengths strengths)
-{
-    int nbSquare = 50;
-    for (size_t i = 0; i < nbSquare; i++)
-    {
-        glm::vec2 centerPoint = boids.at(i).getPosition();
-
-        ctx.square(p6::Center(centerPoint), p6::Radius{size});
-
-        boids.at(i).separationForce(boids, scopes.scope, strengths.separationStrength);
-        boids.at(i).alignementForce(boids, scopes.scope, strengths.alignementStrength);
-        boids.at(i).cohesionForce(boids, scopes.scope, strengths.cohesionStrength);
-
-        boids.at(i).move();
-        boids.at(i).inSquare(squareSize, size, strengths.boundsStrength, scopes.wallScope);
-    }
 }

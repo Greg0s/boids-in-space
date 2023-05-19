@@ -6,6 +6,8 @@
 #include "glm/fwd.hpp"
 #include "p6/p6.h"
 #include "strengths-scopes.hpp"
+#include "../loaderGLTF/Model.h"
+
 
 class Boids {
 private:

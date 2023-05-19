@@ -53,9 +53,18 @@ void Boids::init()
 
 void Boids::draw(const p6::Shader& shaderGLTF)
 {
+    std::string fileGLTF = "./assets/models/drone.gltf";
+    Model       boidModel(fileGLTF.c_str());
+
+    glm::mat4 base;
+
     for (auto& boid : m_boids)
     {
-        boid.draw(shaderGLTF);
+        base = glm::mat4(1.f);
+        base = glm::translate(base, glm::vec3(boid.getPosition().x, boid.getPosition().y, boid.getPosition().z));
+        base = glm::scale(base, glm::vec3(0.008));
+        shaderGLTF.set("model", base);
+        boidModel.Draw(shaderGLTF.id());
     }
 }
 

@@ -53,25 +53,25 @@ void Boids::init()
 
 void Boids::draw(const p6::Shader& shaderGLTF)
 {
-    for (uint i = 0; i < m_boids.size(); i++)
+    for (auto& boid : m_boids)
     {
-        m_boids.at(i).draw(shaderGLTF);
+        boid.draw(shaderGLTF);
     }
 }
 
 void Boids::update(scopes scopes, strengths strengths)
 {
-    for (size_t i = 0; i < m_boids.size(); i++)
+    for (auto& boid : m_boids)
     {
         // glm::vec2 centerPoint = boids.at(i).getPosition();
 
         // ctx.square(p6::Center(centerPoint), p6::Radius{size});
 
-        m_boids.at(i).separationForce(m_boids, scopes.scope, strengths.separationStrength);
-        m_boids.at(i).alignementForce(m_boids, scopes.scope, strengths.alignementStrength);
-        m_boids.at(i).cohesionForce(m_boids, scopes.scope, strengths.cohesionStrength);
+        boid.separationForce(m_boids, scopes.scope, strengths.separationStrength);
+        boid.alignementForce(m_boids, scopes.scope, strengths.alignementStrength);
+        boid.cohesionForce(m_boids, scopes.scope, strengths.cohesionStrength);
 
-        m_boids.at(i).move();
+        boid.move();
         // boids.at(i).inSquare(squareSize, size, strengths.boundsStrength, scopes.wallScope);
     }
 }

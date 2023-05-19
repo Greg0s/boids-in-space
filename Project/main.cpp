@@ -1,9 +1,11 @@
+#include <cstddef>
 #include <fstream>
-// #include "./boid/boid.hpp"
+#include "./boid/boid.hpp"
 #include "./camera/camera.hpp"
 #include "./include/wrapper.hpp"
 #include "./loaderGLTF/Model.h"
 #include "./player/player.hpp"
+#include "boids/boids.hpp"
 #include "glimac/default_shader.hpp"
 #include "glm/ext/matrix_clip_space.hpp"
 #include "glm/ext/matrix_transform.hpp"
@@ -96,8 +98,20 @@ int main()
     glm::vec3 lightColor(1, 0.92, 0.85);
     glm::vec3 lightPosition(0, 100, 0);
 
+    // const size_t    nbSquare   = 50;
+    // const glm::vec2 squareSize = {5, 5};
+    // const float     size       = 1;
+
+    scopes    scopes;
+    strengths strengths;
+
+    Boids boids;
+    boids.init();
+
     // Declare your infinite update loop.
     ctx.update = [&]() {
+        moveListener(ctx, player);
+
         shader.use();
         // envoie matrice au shader
         shader.set("projection", projection);
@@ -108,6 +122,7 @@ int main()
         // "world", translation/rotation etc d'un objet
         // rotate(matrice courante (identité car c'est la 1ère transfo), rotation, axe autour duquel se fait rotation)
         glm::mat4 model = glm::rotate(glm::mat4(1.0f), glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+
         // model = glm::translate(model, )
         // matrice normale, définit où va être cam
         // lookAt(pos ete, centre d'ou tu regarde, où est le haut)
@@ -121,7 +136,8 @@ int main()
 
         ground.update();
 
-        moveListener(ctx, player);
+        // pour init model on la met égale à matrice identité
+        // model = glm::mat4(1.0f);
 
         shaderGLTF.use();
         shaderGLTF.set("view", view);
@@ -132,6 +148,10 @@ int main()
         shaderGLTF.set("camPos", camera.getCoords());
 
         player.draw(shaderGLTF);
+
+        // std::cout << boids.getBoids().at(0).getPosition().x << std::endl;
+        boids.draw(shaderGLTF);
+        boids.update(scopes, strengths);
 
         // cube.Draw(shaderGLTF.id());
 

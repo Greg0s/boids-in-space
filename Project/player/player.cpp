@@ -24,20 +24,17 @@ float Player::getRot() const
 
 void Player::goForward()
 {
-    // if (m_speed + acceleration < maxSpeed)
-    //     m_speed += acceleration;
+    if (m_speed + acceleration < maxSpeed)
+        m_speed += acceleration;
+
     m_pos.x += m_speed * m_dir.x;
     m_pos.z += m_speed * m_dir.z;
-    // std::cout << m_dir.x << " et " << m_dir.z << std::endl;
 }
 
 void Player::goBackward()
 {
-    // if (m_speed - acceleration > minSpeed)
-    //     m_speed -= acceleration;
-
-    m_pos.x -= m_speed * m_dir.x;
-    m_pos.z -= m_speed * m_dir.z;
+    m_pos.x -= minSpeed * m_dir.x;
+    m_pos.z -= minSpeed * m_dir.z;
 }
 
 // void Player::goLeft()
@@ -64,14 +61,6 @@ void Player::goDown()
 void Player::rotateRight()
 {
     m_rot += rotUnit;
-    // while (m_rot < 0)
-    // {
-    //     m_rot += 2 * p6::PI;
-    // }
-    // while (m_rot > 2 * p6::PI)
-    // {
-    //     m_rot -= 2 * p6::PI;
-    // }
 }
 
 // only change sight direction
@@ -87,10 +76,8 @@ void Player::move()
 
 void Player::calcDir()
 {
-    // m_dir = glm::vec3(glm::cos(m_rot), glm::sin(m_rot), glm::sin(m_rot));
     m_dir.x = glm::cos(m_rot);
     m_dir.z = glm::sin(m_rot);
-    // m_dir.x = x + distanceToPlayer * glm::cos(glm::radians(player.getRot() - 180));
 }
 
 void Player::draw(const p6::Shader& shaderGLTF) const
@@ -101,9 +88,7 @@ void Player::draw(const p6::Shader& shaderGLTF) const
     glm::mat4 base = glm::mat4(1.f);
 
     base = glm::translate(base, glm::vec3(m_pos.x, m_pos.y, m_pos.z));
-    // base = glm::rotate(base, p6::PI, glm::vec3(0.0f, 1.0f, 0.0f));
     base = glm::rotate(base, -m_rot, glm::vec3(0.0f, 1.0f, 0.0f));
-
     base = glm::scale(base, glm::vec3(0.01));
 
     shaderGLTF.set("model", base);

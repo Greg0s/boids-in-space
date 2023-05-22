@@ -24,11 +24,11 @@ void moveListener(const p6::Context& ctx, Player& player)
     }
     if (ctx.key_is_pressed(GLFW_KEY_A))
     {
-        player.goLeft();
+        player.rotateLeft();
     }
     if (ctx.key_is_pressed(GLFW_KEY_D))
     {
-        player.goRight();
+        player.rotateRight();
     }
     if (ctx.key_is_pressed(GLFW_KEY_LEFT_SHIFT))
     {
@@ -44,6 +44,8 @@ int main()
 {
     auto ctx = p6::Context{{1280, 720, "Boids in space"}};
     ctx.maximize_window();
+
+    glEnable(GL_DEPTH_TEST);
 
     const p6::Shader shader = p6::load_shader(
         "shaders/shader.vs.glsl",
@@ -110,7 +112,10 @@ int main()
 
     // Declare your infinite update loop.
     ctx.update = [&]() {
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
         moveListener(ctx, player);
+        player.calcDir();
 
         shader.use();
         // envoie matrice au shader
@@ -127,7 +132,7 @@ int main()
         // matrice normale, définit où va être cam
         // lookAt(pos ete, centre d'ou tu regarde, où est le haut)
         // fc fait en sorte que l'horizon est tjrs droit
-        camera.calCoords(player.getPos());
+        camera.calCoords(player);
 
         glm::mat4 view = glm::lookAt(camera.getCoords(), player.getPos(), {0, 1, 0});
 

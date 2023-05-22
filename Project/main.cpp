@@ -16,27 +16,31 @@ void moveListener(const p6::Context& ctx, Player& player)
 {
     if (ctx.key_is_pressed(GLFW_KEY_W))
     {
-        player.goForward();
+        player.goForward(ctx);
+    }
+    else
+    {
+        player.brake(ctx);
     }
     if (ctx.key_is_pressed(GLFW_KEY_S))
     {
-        player.goBackward();
+        player.goBackward(ctx);
     }
     if (ctx.key_is_pressed(GLFW_KEY_A))
     {
-        player.rotateLeft();
+        player.rotateLeft(ctx);
     }
     if (ctx.key_is_pressed(GLFW_KEY_D))
     {
-        player.rotateRight();
+        player.rotateRight(ctx);
     }
     if (ctx.key_is_pressed(GLFW_KEY_LEFT_SHIFT))
     {
-        player.goUp();
+        player.goUp(ctx);
     }
     if (ctx.key_is_pressed(GLFW_KEY_LEFT_CONTROL))
     {
-        player.goDown();
+        player.goDown(ctx);
     }
 }
 

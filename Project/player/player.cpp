@@ -1,11 +1,12 @@
 #include "player.hpp"
 #include "../loaderGLTF/Model.h"
+#include "glm/fwd.hpp"
 #include "glm/gtx/transform.hpp"
 
-const float rotUnit      = p6::PI / 24;
-const float maxSpeed     = 0.06;
-const float minSpeed     = 0.04;
-const float acceleration = 0.001;
+const float rotUnit      = p6::PI / 6;
+const float maxSpeed     = 0.20;
+const float minSpeed     = 0.15;
+const float acceleration = 0.01;
 
 glm::vec3 Player::getPos() const
 {
@@ -22,19 +23,25 @@ float Player::getRot() const
     return m_rot;
 }
 
-void Player::goForward()
+void Player::goForward(const p6::Context& ctx)
 {
     if (m_speed + acceleration < maxSpeed)
         m_speed += acceleration;
 
-    m_pos.x += m_speed * m_dir.x;
-    m_pos.z += m_speed * m_dir.z;
+    m_pos.x += m_speed * m_dir.x * ctx.delta_time();
+    m_pos.z += m_speed * m_dir.z * ctx.delta_time();
 }
 
-void Player::goBackward()
+void Player::goBackward(const p6::Context& ctx)
 {
-    m_pos.x -= minSpeed * m_dir.x;
-    m_pos.z -= minSpeed * m_dir.z;
+    m_pos.x -= minSpeed * m_dir.x * ctx.delta_time();
+    m_pos.z -= minSpeed * m_dir.z * ctx.delta_time();
+}
+
+void Player::brake(const p6::Context& ctx)
+{
+    if (m_speed - acceleration > minSpeed)
+        m_speed -= acceleration * ctx.delta_time();
 }
 
 // void Player::goLeft()
@@ -47,26 +54,26 @@ void Player::goBackward()
 //     m_pos.z += m_speed;
 // }
 
-void Player::goUp()
+void Player::goUp(const p6::Context& ctx)
 {
-    m_pos.y += m_speed;
+    m_pos.y += minSpeed * ctx.delta_time();
 }
 
-void Player::goDown()
+void Player::goDown(const p6::Context& ctx)
 {
-    m_pos.y -= m_speed;
-}
-
-// only change sight direction
-void Player::rotateRight()
-{
-    m_rot += rotUnit;
+    m_pos.y -= minSpeed * ctx.delta_time();
 }
 
 // only change sight direction
-void Player::rotateLeft()
+void Player::rotateRight(const p6::Context& ctx)
 {
-    m_rot -= rotUnit;
+    m_rot += rotUnit * ctx.delta_time();
+}
+
+// only change sight direction
+void Player::rotateLeft(const p6::Context& ctx)
+{
+    m_rot -= rotUnit * ctx.delta_time();
 }
 
 void Player::move()

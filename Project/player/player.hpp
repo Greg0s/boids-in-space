@@ -18,14 +18,15 @@ public:
     glm::vec3 getDir() const;
     float     getRot() const;
 
-    void goForward();
-    void goBackward();
+    void goForward(const p6::Context& ctx);
+    void goBackward(const p6::Context& ctx);
     void goLeft();
     void goRight();
-    void goUp();
-    void goDown();
-    void rotateRight();
-    void rotateLeft();
+    void goUp(const p6::Context& ctx);
+    void goDown(const p6::Context& ctx);
+    void rotateRight(const p6::Context& ctx);
+    void rotateLeft(const p6::Context& ctx);
+    void brake(const p6::Context& ctx);
 
     void move();
 

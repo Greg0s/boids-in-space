@@ -1,3 +1,5 @@
+#pragma once
+
 #include <cstddef>
 #include "./vertex3D.hpp"
 #include "glimac/default_shader.hpp"

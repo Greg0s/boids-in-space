@@ -5,14 +5,18 @@
 
 class Player {
 private:
-    glm::vec3 m_pos = {0., 0., 0.};
-    glm::vec3 m_dir = {1.f, 1.f, 1.f};
+    glm::vec3 m_pos = {0.f, 0.01, 0.f};
+    glm::vec3 m_dir = {0.f, 0.f, 0.f};
 
-    float m_speed = 0.01;
+    float m_rot = 0;
+
+    float m_speed = 0.04;
 
 public:
-    glm::vec3 getPos();
-    glm::vec3 getDir();
+    glm::vec3
+              getPos() const;
+    glm::vec3 getDir() const;
+    float     getRot() const;
 
     void goForward();
     void goBackward();
@@ -20,10 +24,12 @@ public:
     void goRight();
     void goUp();
     void goDown();
-    // void rotateRight();
-    // void rotateLeft();
+    void rotateRight();
+    void rotateLeft();
 
-    // void move();
+    void move();
+
+    void calcDir();
 
     void draw(const p6::Shader& shaderGLTF) const;
 };

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "../player/player.hpp"
 #include "p6/p6.h"
 
 class Camera {
@@ -14,6 +15,6 @@ public:
     void  setHeight(float height);
     float getHeight();
 
-    void      calCoords(glm::vec3 mainPos);
+    void      calCoords(Player& player);
     glm::vec3 getCoords();
 };

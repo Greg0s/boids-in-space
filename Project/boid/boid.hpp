@@ -28,7 +28,7 @@ public:
     void printBoid() const;
 
     void move();
-    void inSquare(const glm::vec2& squareSize, const float& size, const float& strength, const float& scope);
+    void inSquare(const glm::vec3& squareSize, const float& size, const float& strength, const float& scope);
 
     void separationForce(const std::vector<Boid>& boids, float scope, float strength);
     void alignementForce(const std::vector<Boid>& boids, const float& scope, const float& strength);

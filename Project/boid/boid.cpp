@@ -57,13 +57,15 @@ void Boid::move()
     m_pos += m_dir * m_speed;
 }
 
-void Boid::inSquare(const glm::vec2& squareSize, const float& size, const float& strength, const float& scope)
+void Boid::inSquare(const glm::vec3& squareSize, const float& size, const float& strength, const float& scope)
 {
     glm::vec3   boundsForce = {0., 0., 0.};
-    const float maxX        = 1;
-    const float maxY        = 1;
-    const float minX        = -1;
-    const float minY        = -1;
+    const float maxX        = squareSize.x;
+    const float maxY        = squareSize.y;
+    const float maxZ        = squareSize.z;
+    const float minX        = -squareSize.x;
+    const float minY        = -squareSize.y;
+    const float minZ        = -squareSize.z;
 
     if (m_pos.x > squareSize.x - size - scope)
     {
@@ -80,6 +82,14 @@ void Boid::inSquare(const glm::vec2& squareSize, const float& size, const float&
     if (m_pos.y < -squareSize.y + size + scope)
     {
         boundsForce.y = glm::distance(m_pos.y, minY) * (minY / m_pos.y);
+    }
+    if (m_pos.z > squareSize.z - size - scope)
+    {
+        boundsForce.z = -glm::distance(m_pos.z, maxZ) * (m_pos.z / maxZ);
+    }
+    if (m_pos.z < -squareSize.z + size + scope)
+    {
+        boundsForce.z = glm::distance(m_pos.z, minZ) * (minZ / m_pos.z);
     }
 
     m_dir += boundsForce * strength;
@@ -166,16 +176,16 @@ void Boid::cohesionForce(const std::vector<Boid>& boids, const float& scope, con
 
 // void Boid::draw(const p6::Shader& shaderGLTF)
 // {
-    // std::string fileGLTF = "./assets/models/drone.gltf";
-    // Model       boid(fileGLTF.c_str());
+// std::string fileGLTF = "./assets/models/drone.gltf";
+// Model       boid(fileGLTF.c_str());
 
-    // glm::mat4 base = glm::mat4(1.f);
-    // base           = glm::translate(base, glm::vec3(m_pos.x, m_pos.y, m_pos.z));
-    // //  pour tester que affichage gltf boid fonctionne
-    // // base = glm::translate(base, glm::vec3(0.1, 0, 0));
+// glm::mat4 base = glm::mat4(1.f);
+// base           = glm::translate(base, glm::vec3(m_pos.x, m_pos.y, m_pos.z));
+// //  pour tester que affichage gltf boid fonctionne
+// // base = glm::translate(base, glm::vec3(0.1, 0, 0));
 
-    // base = glm::scale(base, glm::vec3(0.008));
+// base = glm::scale(base, glm::vec3(0.008));
 
-    // shaderGLTF.set("model", base);
-    // boid.Draw(shaderGLTF.id());
+// shaderGLTF.set("model", base);
+// boid.Draw(shaderGLTF.id());
 // }

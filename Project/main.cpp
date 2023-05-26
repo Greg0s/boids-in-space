@@ -85,12 +85,43 @@ int main()
 
     ground.init();
 
-    // Wrapper player;
+    // ~~~~~~~~~~~~~ Floor and ceiling to debug ~~~~~~~~~~~~~~~~~~~
+    // Wrapper box;
 
-    // struct Vertex3D p1 = {glm::vec3(0.f, 0.f, 0.f), glm::vec3(1.f, 1.f, 1.f)};
-    // struct Vertex3D p2 = {glm::vec3(-0.01f, 0.f, 0.f), glm::vec3(1.f, 1.f, 1.f)};
-    // struct Vertex3D p3 = {glm::vec3(-0.01f, 0.01f, 0.f), glm::vec3(1.f, 1.f, 1.f)};
-    // struct Vertex3D p4 = {glm::vec3(0.0f, 0.01f, 0.f), glm::vec3(1.f, 1.f, 1.f)};
+    // struct Vertex3D b1 = {glm::vec3(0.5f, 0.5f, -0.5f), glm::vec3(1.f, 0.5f, 0.f)};
+    // struct Vertex3D b2 = {glm::vec3(-0.5f, 0.5f, -0.5f), glm::vec3(0.f, 1.f, 0.5f)};
+    // struct Vertex3D b3 = {glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec3(0.f, 0.5f, 1.f)};
+    // struct Vertex3D b4 = {glm::vec3(0.5f, -0.5f, -0.5f), glm::vec3(0.f, 0.5f, 1.f)};
+
+    // struct Vertex3D b5 = {glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(0.f, 0.5f, 1.f)};
+    // struct Vertex3D b6 = {glm::vec3(-0.5f, 0.5f, 0.5f), glm::vec3(0.f, 0.5f, 1.f)};
+    // struct Vertex3D b7 = {glm::vec3(-0.5f, -0.5f, 0.5f), glm::vec3(0.f, 0.5f, 1.f)};
+    // struct Vertex3D b8 = {glm::vec3(0.5f, -0.5f, 0.5f), glm::vec3(0.f, 0.5f, 1.f)};
+
+    // box.vertices.push_back(b1);
+    // box.vertices.push_back(b2);
+    // box.vertices.push_back(b3);
+    // box.vertices.push_back(b4);
+    // box.vertices.push_back(b5);
+    // box.vertices.push_back(b6);
+    // box.vertices.push_back(b7);
+    // box.vertices.push_back(b8);
+
+    // box.indices.push_back(0);
+    // box.indices.push_back(1);
+    // box.indices.push_back(2);
+    // box.indices.push_back(0);
+    // box.indices.push_back(2);
+    // box.indices.push_back(3);
+
+    // box.indices.push_back(4);
+    // box.indices.push_back(5);
+    // box.indices.push_back(6);
+    // box.indices.push_back(4);
+    // box.indices.push_back(6);
+    // box.indices.push_back(7);
+
+    // box.init();
 
     /*********************/
 
@@ -118,6 +149,16 @@ int main()
     ctx.update = [&]() {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+        ctx.imgui = [&]() {
+            ImGui::Begin("Boids");
+            ImGui::SliderFloat("Scope", &scopes.scope, 0.f, 1.f);
+            ImGui::SliderFloat("Separation strength", &strengths.separationStrength, 0.f, 0.1);
+            ImGui::SliderFloat("Alignement strength", &strengths.alignementStrength, 0.f, 0.1);
+            ImGui::SliderFloat("Cohesion strength", &strengths.cohesionStrength, 0.f, 0.1);
+
+            ImGui::End();
+        };
+
         moveListener(ctx, player);
         player.calcDir();
 
@@ -143,7 +184,8 @@ int main()
         shader.set("model", model);
         shader.set("view", view);
 
-        ground.update();
+        // ground.update();
+        // box.update();
 
         // pour init model on la met égale à matrice identité
         // model = glm::mat4(1.0f);

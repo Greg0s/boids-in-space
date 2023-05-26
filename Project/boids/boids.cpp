@@ -2,20 +2,13 @@
 #include "glm/ext/matrix_transform.hpp"
 #include "glm/fwd.hpp"
 
-glm::vec3 randomPos(glm::vec2 squareSize, float size)
+glm::vec3 randomPos(glm::vec3 squareSize, float size)
 {
-    glm::vec2 pos2D;
-    pos2D = p6::random::point(
-        {
-            -squareSize.x + size,
-            -squareSize.y + size,
-        },
-        {
-            squareSize.x - size,
-            squareSize.y - size,
-        }
-    );
-    return glm::vec3{pos2D.x, 0., pos2D.y};
+    float x = p6::random::number(-squareSize.x + size, squareSize.x - size);
+    float y = p6::random::number(-squareSize.y + size, squareSize.y - size);
+    float z = p6::random::number(-squareSize.z + size, squareSize.z - size);
+
+    return glm::vec3{x, y, z};
 }
 
 std::vector<Boid> Boids::getBoids()
@@ -33,7 +26,7 @@ void Boids::init()
     for (size_t i = 0; i < m_nbSquare; i++)
     {
         // square appears only in the square = center of the square
-        pos = randomPos(m_squareSize, size);
+        pos = randomPos(m_squareSize, m_size);
 
         // squares have a random direction
         direction = {p6::random::direction(), 1.};
@@ -81,6 +74,6 @@ void Boids::update(scopes scopes, strengths strengths)
         boid.cohesionForce(m_boids, scopes.scope, strengths.cohesionStrength);
 
         boid.move();
-        // boids.at(i).inSquare(squareSize, size, strengths.boundsStrength, scopes.wallScope);
+        boid.inSquare(m_squareSize, m_size, strengths.boundsStrength, scopes.wallScope);
     }
 }

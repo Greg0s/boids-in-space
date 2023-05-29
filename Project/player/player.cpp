@@ -100,6 +100,6 @@ void Player::draw(const p6::Shader& shaderGLTF) const
 
     shaderGLTF.set("model", base);
     player.Draw(shaderGLTF.id());
-    std::cout << m_pos.x << "et" << m_pos.z << std::endl;
-    std::cout << m_rot << std::endl;
+    // std::cout << m_pos.x << "et" << m_pos.z << std::endl;
+    // std::cout << m_rot << std::endl;
 }

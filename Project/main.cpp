@@ -6,6 +6,8 @@
 #include "./loaderGLTF/Model.h"
 #include "./player/player.hpp"
 #include "boids/boids.hpp"
+#include "cubemap/cubemap.hpp"
+#include "cubemap/cubemapTexture.hpp"
 #include "glimac/default_shader.hpp"
 #include "glm/ext/matrix_clip_space.hpp"
 #include "glm/ext/matrix_transform.hpp"
@@ -61,67 +63,37 @@ int main()
         "shaders/gltf.fs.glsl"
     );
 
+    const p6::Shader shaderCubemap = p6::load_shader(
+        "shaders/cubemap.vs.glsl",
+        "shaders/cubemap.fs.glsl"
+    );
+
     /*********************************
      * HERE SHOULD COME THE INITIALIZATION CODE
      *********************************/
+    Wrapper cubemap;
+    initCubemap(cubemap);
+    GLuint textureUnit = 0;
 
-    Wrapper ground;
+    shaderCubemap.use();
+    std::vector<std::filesystem::path> faces = {
+        "assets/cubemap/right.png",  // right
+        "assets/cubemap/left.png",   // left
+        "assets/cubemap/top.png",    // top
+        "assets/cubemap/bottom.png", // bottom
+        "assets/cubemap/back.png",   // back
+        "assets/cubemap/front.png"}; // front
 
-    struct Vertex3D g1 = {glm::vec3(0.f, 0.f, 0.f), glm::vec3(1.f, 0.5f, 0.f)};
-    struct Vertex3D g2 = {glm::vec3(-0.5f, 0.f, 0.f), glm::vec3(0.f, 1.f, 0.5f)};
-    struct Vertex3D g3 = {glm::vec3(-0.5f, 0.5f, 0.f), glm::vec3(0.f, 0.5f, 1.f)};
-    struct Vertex3D g4 = {glm::vec3(0.0f, 0.5f, 0.f), glm::vec3(0.f, 0.5f, 1.f)};
-    ground.vertices.push_back(g1);
-    ground.vertices.push_back(g2);
-    ground.vertices.push_back(g3);
-    ground.vertices.push_back(g4);
+    glActiveTexture(GL_TEXTURE0);
+    // loadAndBindCubemap(shaderCubemap, faces, "skybox");
 
-    ground.indices.push_back(0);
-    ground.indices.push_back(1);
-    ground.indices.push_back(2);
-    ground.indices.push_back(0);
-    ground.indices.push_back(2);
-    ground.indices.push_back(3);
+    // glActiveTexture(GL_TEXTURE0 + textureUnit + 1); // ?
 
-    ground.init();
-
-    // ~~~~~~~~~~~~~ Floor and ceiling to debug ~~~~~~~~~~~~~~~~~~~
-    // Wrapper box;
-
-    // struct Vertex3D b1 = {glm::vec3(0.5f, 0.5f, -0.5f), glm::vec3(1.f, 0.5f, 0.f)};
-    // struct Vertex3D b2 = {glm::vec3(-0.5f, 0.5f, -0.5f), glm::vec3(0.f, 1.f, 0.5f)};
-    // struct Vertex3D b3 = {glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec3(0.f, 0.5f, 1.f)};
-    // struct Vertex3D b4 = {glm::vec3(0.5f, -0.5f, -0.5f), glm::vec3(0.f, 0.5f, 1.f)};
-
-    // struct Vertex3D b5 = {glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(0.f, 0.5f, 1.f)};
-    // struct Vertex3D b6 = {glm::vec3(-0.5f, 0.5f, 0.5f), glm::vec3(0.f, 0.5f, 1.f)};
-    // struct Vertex3D b7 = {glm::vec3(-0.5f, -0.5f, 0.5f), glm::vec3(0.f, 0.5f, 1.f)};
-    // struct Vertex3D b8 = {glm::vec3(0.5f, -0.5f, 0.5f), glm::vec3(0.f, 0.5f, 1.f)};
-
-    // box.vertices.push_back(b1);
-    // box.vertices.push_back(b2);
-    // box.vertices.push_back(b3);
-    // box.vertices.push_back(b4);
-    // box.vertices.push_back(b5);
-    // box.vertices.push_back(b6);
-    // box.vertices.push_back(b7);
-    // box.vertices.push_back(b8);
-
-    // box.indices.push_back(0);
-    // box.indices.push_back(1);
-    // box.indices.push_back(2);
-    // box.indices.push_back(0);
-    // box.indices.push_back(2);
-    // box.indices.push_back(3);
-
-    // box.indices.push_back(4);
-    // box.indices.push_back(5);
-    // box.indices.push_back(6);
-    // box.indices.push_back(4);
-    // box.indices.push_back(6);
-    // box.indices.push_back(7);
-
-    // box.init();
+    // CubemapTexture texture(faces, 0);
+    // texture.load();
+    // texture.bind(shaderCubemap, "cubemap", textureUnit);
+    loadAndBindCubemap(shaderCubemap, faces, "skybox", textureUnit);
+    // texture.loadBind(shaderCubemap, "cubemap", textureUnit);
 
     /*********************/
 
@@ -145,6 +117,8 @@ int main()
     Boids boids;
     boids.init();
 
+    // cubemap.init();
+
     // Declare your infinite update loop.
     ctx.update = [&]() {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -161,31 +135,29 @@ int main()
 
         moveListener(ctx, player);
         player.calcDir();
-
-        shader.use();
-        // envoie matrice au shader
-        shader.set("projection", projection);
-
-        // camera.setDistance(camera.getDistance() + 0.01);
-        // posTest += glm::vec3(0.1, 0.1, 0.);
-
-        // "world", translation/rotation etc d'un objet
-        // rotate(matrice courante (identité car c'est la 1ère transfo), rotation, axe autour duquel se fait rotation)
-        glm::mat4 model = glm::rotate(glm::mat4(1.0f), glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-
-        // model = glm::translate(model, )
-        // matrice normale, définit où va être cam
-        // lookAt(pos ete, centre d'ou tu regarde, où est le haut)
-        // fc fait en sorte que l'horizon est tjrs droit
         camera.calCoords(player);
 
-        glm::mat4 view = glm::lookAt(camera.getCoords(), player.getPos(), {0, 1, 0});
+        // shader.use();
 
+        glm::mat4 model = glm::rotate(glm::mat4(1.0f), glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+        glm::mat4 view  = glm::lookAt(camera.getCoords(), player.getPos(), {0, 1, 0});
+
+        shader.set("projection", projection);
         shader.set("model", model);
         shader.set("view", view);
 
-        // ground.update();
-        // box.update();
+        // shaderCubemap.use();
+        // shaderCubemap.set("plane", glm::vec4(0, 0, 1, 100));
+
+        // shaderCubemap.set("projection", projection);
+        // shaderCubemap.set("model", model);
+        // shaderCubemap.set("view", view);
+        shaderCubemap.use();
+        shaderCubemap.set("projection", projection);
+        shaderCubemap.set("view", glm::mat4(glm::mat3(view))); // Remove translation from the view matrix
+
+        cubemap.draw();
+        cubemap.update();
 
         // pour init model on la met égale à matrice identité
         // model = glm::mat4(1.0f);
@@ -200,7 +172,6 @@ int main()
 
         player.draw(shaderGLTF);
 
-        // std::cout << boids.getBoids().at(0).getPosition().x << std::endl;
         boids.draw(shaderGLTF);
         boids.update(scopes, strengths);
 
@@ -209,12 +180,10 @@ int main()
         /*********************************
          * HERE SHOULD COME THE RENDERING CODE
          *********************************/
-        // glimac::bind_default_shader();
 
         /*********************************/
     };
 
     // Should be done last. It starts the infinite loop.
     ctx.start();
-    // triangle.clear();
 }

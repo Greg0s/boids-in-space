@@ -5,29 +5,37 @@
 #include "glimac/default_shader.hpp"
 #include "p6/p6.h"
 
+struct TextureCube {
+    glm::vec2 texCoord;
+    glm::vec2 texId;
+};
+
 class Wrapper {
 private:
-    GLuint vao = 0;
-    GLuint vbo = 0;
-    GLuint ibo;
+    GLuint vao{};
+    GLuint vbo{};
+    GLuint ibo{};
+    GLuint tex{};
 
     const GLuint VERTEX_ATTR_POSITION = 0;
     const GLuint VERTEX_ATTR_COLOR    = 1;
 
 public:
-    std::vector<Vertex3D> vertices;
-    std::vector<uint32_t> indices;
-    void                  init();
-    // Wrapper() { init(); };
+    std::vector<Vertex3D>    vertices;
+    std::vector<TextureCube> textures;
+    std::vector<uint32_t>    indices;
+    void                     init();
+    Wrapper() { init(); };
     ~Wrapper()
     {
         glDeleteBuffers(1, &vbo);
         glDeleteVertexArrays(1, &vao);
     };
     void update();
-    // void draw();
+    void draw();
     void print();
     // void clear();
+    void updateVertices();
 };
 
 void Wrapper::init()
@@ -60,6 +68,21 @@ void Wrapper::init()
     glVertexAttribPointer(VERTEX_ATTR_COLOR, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex3D), (const GLvoid*)(offsetof(Vertex3D, color)));
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+    // tex
+
+    glGenBuffers(1, &tex);
+
+    glBindBuffer(GL_ARRAY_BUFFER, tex);
+    glEnableVertexAttribArray(2);
+    glEnableVertexAttribArray(3);
+
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(TextureCube), (void*)offsetof(TextureCube, texCoord));
+    glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, sizeof(TextureCube), (void*)offsetof(TextureCube, texId));
+
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+    //
 
     glBindVertexArray(0);
 }
@@ -94,3 +117,38 @@ void Wrapper::print()
 //     glDeleteBuffers(1, &vbo);
 //     glDeleteVertexArrays(1, &vao);
 // }
+
+void Wrapper::draw()
+{
+    GLuint texture_id = 0;
+    // glBindVertexArray(vao);
+    // glDrawArrays(GL_TRIANGLES, 0, indices.size());
+    // glBindVertexArray(0);
+    glBindTexture(GL_TEXTURE_CUBE_MAP, texture_id);
+    glDrawArrays(GL_TEXTURE_2D, 0, indices.size());
+
+    glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
+}
+
+void Wrapper::updateVertices()
+{
+    if (!vertices.empty() && !indices.empty())
+    {
+        std::vector<Vertex3D> vertex;
+        for (int i : indices)
+        {
+            vertex.push_back(vertices[i]);
+        }
+
+        glBindBuffer(GL_ARRAY_BUFFER, vbo);
+        glBufferData(GL_ARRAY_BUFFER, vertex.size() * sizeof(Vertex3D), &vertex.front(), GL_STATIC_DRAW);
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+    }
+    else
+    {
+        std::string message;
+        message += "Vertices array is empty";
+        std::cerr << message << '\n';
+        throw std::runtime_error{message};
+    }
+}

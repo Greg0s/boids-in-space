@@ -5,7 +5,7 @@
 
 class Player {
 private:
-    glm::vec3 m_pos = {0.f, 0.01, 0.f};
+    glm::vec3 m_pos = {-1.f, 0.5, 0.f};
     glm::vec3 m_dir = {0.f, 0.f, 0.f};
 
     float m_rot = 0;

@@ -1,7 +1,7 @@
 #pragma once
 
 struct strengths {
-    const float boundsStrength     = 1;
+    const float boundsStrength     = 5;
     float       separationStrength = 0.04; // 2
     float       alignementStrength = 0.03; // 5
     float       cohesionStrength   = 0.01; // 5

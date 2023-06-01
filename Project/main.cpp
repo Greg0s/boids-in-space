@@ -14,7 +14,7 @@
 #include "include/setting.hpp"
 #include "p6/p6.h"
 
-void moveListener(const p6::Context& ctx, Player& player)
+void moveListener(const p6::Context& ctx, Player& player, Camera& camera)
 {
     if (ctx.key_is_pressed(GLFW_KEY_W))
     {
@@ -43,6 +43,14 @@ void moveListener(const p6::Context& ctx, Player& player)
     if (ctx.key_is_pressed(GLFW_KEY_LEFT_CONTROL))
     {
         player.goDown(ctx);
+    }
+    if (ctx.key_is_pressed(GLFW_KEY_UP))
+    {
+        camera.closer();
+    }
+    if (ctx.key_is_pressed(GLFW_KEY_DOWN))
+    {
+        camera.further();
     }
 }
 
@@ -124,7 +132,7 @@ int main()
             ImGui::End();
         };
 
-        moveListener(ctx, player);
+        moveListener(ctx, player, camera);
         player.calcDir();
         camera.calCoords(player);
 

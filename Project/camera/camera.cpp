@@ -21,15 +21,27 @@ float Camera::getHeight()
     return m_coords[2];
 }
 
+void Camera::further()
+{
+    if (m_distance < 2)
+        m_distance += 0.025;
+}
+
+void Camera::closer()
+{
+    if (m_distance > 0.5)
+        m_distance -= 0.025;
+}
+
 void Camera::calCoords(Player& player)
 {
     // glm::vec2 pos(mainPos.x - m_distance, );
     //  m_coords = {pos, m_height};
-    float distanceToPlayer = 0.5;
+    // float distanceToPlayer = 0.5;
 
     m_coords.y = player.getPos().y + m_height;
-    m_coords.x = player.getPos().x + distanceToPlayer * glm::cos(player.getRot() - p6::PI);
-    m_coords.z = player.getPos().z + distanceToPlayer * glm::sin(player.getRot() - p6::PI);
+    m_coords.x = player.getPos().x + m_distance * glm::cos(player.getRot() - p6::PI);
+    m_coords.z = player.getPos().z + m_distance * glm::sin(player.getRot() - p6::PI);
 }
 
 glm::vec3 Camera::getCoords()

@@ -51,7 +51,7 @@ void Boids::draw(const p6::Shader& shaderGLTF)
     {
         base = glm::mat4(1.f);
         base = glm::translate(base, glm::vec3(boid.getPosition().x, boid.getPosition().y, boid.getPosition().z));
-        base = glm::scale(base, glm::vec3(0.008));
+        base = glm::scale(base, glm::vec3(0.04));
 
         shaderGLTF.set("model", base);
         m_gltf.getModel().Draw(shaderGLTF.id());

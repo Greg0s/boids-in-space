@@ -2,6 +2,10 @@
 #include "glm/ext/matrix_transform.hpp"
 #include "glm/fwd.hpp"
 
+Boids::Boids(std::string fileGLTF)
+    : m_gltf(fileGLTF)
+{}
+
 glm::vec3 randomPos(glm::vec3 squareSize, float size)
 {
     float x = p6::random::number(-squareSize.x + size, squareSize.x - size);
@@ -22,32 +26,24 @@ void Boids::init()
     glm::vec3 direction;
     glm::vec3 speed = {0.008, 0.008, 0.008};
 
-    // création du vector des boids
+    // vector<Boid> creation
     for (size_t i = 0; i < m_nbSquare; i++)
     {
         // square appears only in the square = center of the square
         pos = randomPos(m_squareSize, m_size);
-
         // squares have a random direction
         direction = {p6::random::direction(), 1.};
-
         // create the boid of the square i
         Boid boid = Boid(pos, direction, speed);
-
-        // boid.printBoid();
-
         // add this boid to the others
         m_boids.push_back(boid);
-
-        // print pos for debug
-        // std::cout << "pos : " << pos.x << " " << pos.y << std::endl;
     }
 }
 
 void Boids::draw(const p6::Shader& shaderGLTF)
 {
-    std::string fileGLTF = "./assets/models/drone.gltf";
-    Model       boidModel(fileGLTF.c_str());
+    // std::string fileGLTF = "./assets/models/planetesAllegee.gltf";
+    // Model       boidModel(fileGLTF.c_str());
 
     glm::mat4 base;
 
@@ -56,8 +52,9 @@ void Boids::draw(const p6::Shader& shaderGLTF)
         base = glm::mat4(1.f);
         base = glm::translate(base, glm::vec3(boid.getPosition().x, boid.getPosition().y, boid.getPosition().z));
         base = glm::scale(base, glm::vec3(0.008));
+
         shaderGLTF.set("model", base);
-        boidModel.Draw(shaderGLTF.id());
+        m_gltf.getModel().Draw(shaderGLTF.id());
     }
 }
 
@@ -65,10 +62,6 @@ void Boids::update(scopes scopes, strengths strengths)
 {
     for (auto& boid : m_boids)
     {
-        // glm::vec2 centerPoint = boids.at(i).getPosition();
-
-        // ctx.square(p6::Center(centerPoint), p6::Radius{size});
-
         boid.separationForce(m_boids, scopes.scope, strengths.separationStrength);
         boid.alignementForce(m_boids, scopes.scope, strengths.alignementStrength);
         boid.cohesionForce(m_boids, scopes.scope, strengths.cohesionStrength);

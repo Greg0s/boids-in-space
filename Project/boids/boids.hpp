@@ -4,6 +4,7 @@
 #include <vector>
 #include "../boid/boid.hpp"
 #include "../loaderGLTF/Model.h"
+#include "../loaderGLTF/gltf.hpp"
 #include "glm/fwd.hpp"
 #include "p6/p6.h"
 #include "strengths-scopes.hpp"
@@ -17,7 +18,11 @@ private:
     // values = size from the center of the square = total square size /2
     const float m_size = 0.05;
 
+    Gltf m_gltf;
+
 public:
+    Boids(std::string fileGLTF);
+
     void init();
 
     void draw(const p6::Shader& shaderGLTF);

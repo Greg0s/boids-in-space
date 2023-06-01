@@ -11,7 +11,7 @@ void Setting::rotate()
 void Setting::drawSetting(const p6::Shader& shader)
 {
     glm::mat4   base    = glm::mat4(1.f);
-    const float rotUnit = p6::PI / 300;
+    const float rotUnit = p6::PI / 800;
 
     m_rot += rotUnit;
 

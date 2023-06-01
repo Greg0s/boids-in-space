@@ -5,17 +5,12 @@
 
 class Gltf {
 private:
-    glm::mat4 m_base;
-    Model     m_model;
+    Model m_model;
 
 public:
     Gltf(const std::string& file);
 
-    void draw(const p6::Shader& shader);
+    // void draw(const p6::Shader& shader, glm::mat4 base);
 
     inline Model getModel() { return m_model; };
-
-    inline glm::mat4 getBase() { return m_base; };
-
-    void setBase(glm::mat4 base);
 };

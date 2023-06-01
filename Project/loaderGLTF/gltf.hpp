@@ -10,7 +10,7 @@ private:
 public:
     Gltf(const std::string& file);
 
-    // void draw(const p6::Shader& shader, glm::mat4 base);
+    void draw(const p6::Shader& shader, glm::mat4 base);
 
     inline Model getModel() { return m_model; };
 };

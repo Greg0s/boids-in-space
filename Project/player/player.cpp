@@ -10,7 +10,7 @@ const float minSpeed     = 0.15;
 const float acceleration = 0.01;
 
 Player::Player(std::string fileGLTF)
-    : m_rot(0), m_speed(0.04), m_Gltf(fileGLTF)
+    : m_rot(0), m_speed(0.04), m_gltf(fileGLTF)
 {
     m_pos = {0.f, 0.01, 0.f};
     m_dir = {0.f, 0.f, 0.f};
@@ -19,8 +19,6 @@ Player::Player(std::string fileGLTF)
     // // m_model              = Model(fileGLTF.c_str());
 
     // glm::mat4 base = glm::mat4(1.f);
-
-    m_Gltf = Gltf(fileGLTF);
 }
 
 glm::vec3 Player::getPos() const
@@ -114,9 +112,9 @@ void Player::draw(const p6::Shader& shaderGLTF)
     base = glm::rotate(base, p6::PI, glm::vec3(1.0f, 0.0f, 0.0f));
     base = glm::scale(base, glm::vec3(0.05));
 
-    m_Gltf.setBase(base);
+    // m_gltf.setBase(base);
 
-    shaderGLTF.set("model", m_Gltf.getBase());
+    shaderGLTF.set("model", base);
 
-    m_Gltf.getModel().Draw(shaderGLTF.id());
+    m_gltf.getModel().Draw(shaderGLTF.id());
 }

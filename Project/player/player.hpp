@@ -14,7 +14,7 @@ private:
 
     float m_speed;
 
-    Gltf m_Gltf;
+    Gltf m_gltf;
 
 public:
     Player(std::string fileGLTF);

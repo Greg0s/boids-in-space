@@ -4,7 +4,7 @@
 #include "glm/fwd.hpp"
 #include "glm/gtx/transform.hpp"
 
-const float rotUnit      = p6::PI / 6;
+const float rotUnit      = p6::PI / 3;
 const float maxSpeed     = 0.20;
 const float minSpeed     = 0.15;
 const float acceleration = 0.01;

@@ -106,7 +106,8 @@ int main()
     scopes    scopes;
     strengths strengths;
 
-    Boids boids;
+    std::string boidsFileGLTF = "./assets/models/planetesAllegee.gltf";
+    Boids       boids(boidsFileGLTF);
     boids.init();
 
     // Declare your infinite update loop.

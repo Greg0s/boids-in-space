@@ -85,52 +85,16 @@ int main()
 
     ground.init();
 
-    // ~~~~~~~~~~~~~ Floor and ceiling to debug ~~~~~~~~~~~~~~~~~~~
-    // Wrapper box;
-
-    // struct Vertex3D b1 = {glm::vec3(0.5f, 0.5f, -0.5f), glm::vec3(1.f, 0.5f, 0.f)};
-    // struct Vertex3D b2 = {glm::vec3(-0.5f, 0.5f, -0.5f), glm::vec3(0.f, 1.f, 0.5f)};
-    // struct Vertex3D b3 = {glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec3(0.f, 0.5f, 1.f)};
-    // struct Vertex3D b4 = {glm::vec3(0.5f, -0.5f, -0.5f), glm::vec3(0.f, 0.5f, 1.f)};
-
-    // struct Vertex3D b5 = {glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(0.f, 0.5f, 1.f)};
-    // struct Vertex3D b6 = {glm::vec3(-0.5f, 0.5f, 0.5f), glm::vec3(0.f, 0.5f, 1.f)};
-    // struct Vertex3D b7 = {glm::vec3(-0.5f, -0.5f, 0.5f), glm::vec3(0.f, 0.5f, 1.f)};
-    // struct Vertex3D b8 = {glm::vec3(0.5f, -0.5f, 0.5f), glm::vec3(0.f, 0.5f, 1.f)};
-
-    // box.vertices.push_back(b1);
-    // box.vertices.push_back(b2);
-    // box.vertices.push_back(b3);
-    // box.vertices.push_back(b4);
-    // box.vertices.push_back(b5);
-    // box.vertices.push_back(b6);
-    // box.vertices.push_back(b7);
-    // box.vertices.push_back(b8);
-
-    // box.indices.push_back(0);
-    // box.indices.push_back(1);
-    // box.indices.push_back(2);
-    // box.indices.push_back(0);
-    // box.indices.push_back(2);
-    // box.indices.push_back(3);
-
-    // box.indices.push_back(4);
-    // box.indices.push_back(5);
-    // box.indices.push_back(6);
-    // box.indices.push_back(4);
-    // box.indices.push_back(6);
-    // box.indices.push_back(7);
-
-    // box.init();
-
     /*********************/
 
     // matrice de projection, permet de delimiter champ qu'on voit, fait perspective
     // perspective(fov, aspect ratio fenetre,distance min, distance max)
     glm::mat4 projection = glm::perspective(glm::radians(45.f), static_cast<float>(1280) / static_cast<float>(720), 0.001f, 100.0f);
 
-    Camera camera;
-    Player player;
+    Camera      camera;
+    std::string playerFileGLTF = "./assets/models/vaisseauFinal.gltf";
+    // glm::mat4   basePlayer     = glm::mat4(1.f);
+    Player player(playerFileGLTF);
 
     glm::vec3 lightColor(1, 0.92, 0.85);
     glm::vec3 lightPosition(0, 100, 0);
@@ -165,9 +129,6 @@ int main()
         shader.use();
         // envoie matrice au shader
         shader.set("projection", projection);
-
-        // camera.setDistance(camera.getDistance() + 0.01);
-        // posTest += glm::vec3(0.1, 0.1, 0.);
 
         // "world", translation/rotation etc d'un objet
         // rotate(matrice courante (identité car c'est la 1ère transfo), rotation, axe autour duquel se fait rotation)

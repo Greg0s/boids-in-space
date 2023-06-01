@@ -1,20 +1,26 @@
 #pragma once
 
+#include "../loaderGLTF/Model.h"
+#include "../loaderGLTF/gltf.hpp"
 #include "glm/fwd.hpp"
 #include "p6/p6.h"
 
 class Player {
 private:
-    glm::vec3 m_pos = {0.f, 0.01, 0.f};
-    glm::vec3 m_dir = {0.f, 0.f, 0.f};
+    glm::vec3 m_pos;
+    glm::vec3 m_dir;
 
-    float m_rot = 0;
+    float m_rot;
 
-    float m_speed = 0.04;
+    float m_speed;
+
+    Gltf m_Gltf;
 
 public:
-    glm::vec3
-              getPos() const;
+    Player(std::string fileGLTF);
+    void init();
+
+    glm::vec3 getPos() const;
     glm::vec3 getDir() const;
     float     getRot() const;
 
@@ -32,5 +38,5 @@ public:
 
     void calcDir();
 
-    void draw(const p6::Shader& shaderGLTF) const;
+    void draw(const p6::Shader& shaderGLTF);
 };

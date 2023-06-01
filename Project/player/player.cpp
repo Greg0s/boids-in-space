@@ -1,5 +1,6 @@
 #include "player.hpp"
 #include "../loaderGLTF/Model.h"
+#include "../loaderGLTF/gltf.hpp"
 #include "glm/fwd.hpp"
 #include "glm/gtx/transform.hpp"
 
@@ -7,6 +8,20 @@ const float rotUnit      = p6::PI / 6;
 const float maxSpeed     = 0.20;
 const float minSpeed     = 0.15;
 const float acceleration = 0.01;
+
+Player::Player(std::string fileGLTF)
+    : m_rot(0), m_speed(0.04), m_Gltf(fileGLTF)
+{
+    m_pos = {0.f, 0.01, 0.f};
+    m_dir = {0.f, 0.f, 0.f};
+
+    // std::string fileGLTF = "./assets/models/vaisseauFinal.gltf";
+    // // m_model              = Model(fileGLTF.c_str());
+
+    // glm::mat4 base = glm::mat4(1.f);
+
+    m_Gltf = Gltf(fileGLTF);
+}
 
 glm::vec3 Player::getPos() const
 {
@@ -87,19 +102,21 @@ void Player::calcDir()
     m_dir.z = glm::sin(m_rot);
 }
 
-void Player::draw(const p6::Shader& shaderGLTF) const
+void Player::draw(const p6::Shader& shaderGLTF)
 {
-    std::string fileGLTF = "./assets/models/drone.gltf";
-    Model       player(fileGLTF.c_str());
+    // glm::mat4 base = m_Gltf.getBase();
 
     glm::mat4 base = glm::mat4(1.f);
 
     base = glm::translate(base, glm::vec3(m_pos.x, m_pos.y, m_pos.z));
-    base = glm::rotate(base, -m_rot, glm::vec3(0.0f, 1.0f, 0.0f));
-    base = glm::scale(base, glm::vec3(0.01));
 
-    shaderGLTF.set("model", base);
-    player.Draw(shaderGLTF.id());
-    std::cout << m_pos.x << "et" << m_pos.z << std::endl;
-    std::cout << m_rot << std::endl;
+    base = glm::rotate(base, -m_rot, glm::vec3(0.0f, 1.0f, 0.0f));
+    base = glm::rotate(base, p6::PI, glm::vec3(1.0f, 0.0f, 0.0f));
+    base = glm::scale(base, glm::vec3(0.05));
+
+    m_Gltf.setBase(base);
+
+    shaderGLTF.set("model", m_Gltf.getBase());
+
+    m_Gltf.getModel().Draw(shaderGLTF.id());
 }

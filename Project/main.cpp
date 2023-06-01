@@ -11,8 +11,8 @@
 #include "glm/ext/matrix_clip_space.hpp"
 #include "glm/ext/matrix_transform.hpp"
 #include "glm/fwd.hpp"
-#include "include/setting.hpp"
 #include "p6/p6.h"
+#include "setting/setting.hpp"
 
 void moveListener(const p6::Context& ctx, Player& player, Camera& camera)
 {
@@ -71,6 +71,11 @@ int main()
         "shaders/gltf.fs.glsl"
     );
 
+    const p6::Shader shaderCube = p6::load_shader(
+        "shaders/cube.vs.glsl",
+        "shaders/cube.fs.glsl"
+    );
+
     /*********************************
      * HERE SHOULD COME THE INITIALIZATION CODE
      *********************************/
@@ -95,9 +100,10 @@ int main()
 
     ground.init();
 
-    Gltf planeteSetting("./assets/models/planetesDecor.gltf");
+    // Gltf planeteSetting();
+    Setting planetesSetting("./assets/models/planetesDecor.gltf");
 
-    Gltf cube("./assets/models/cubeDecor.gltf");
+    Gltf cube("./assets/models/cube.gltf");
 
     /*********************/
 
@@ -149,9 +155,6 @@ int main()
         shader.set("model", model);
         shader.set("view", view);
 
-        // ground.update();
-        // box.update();
-
         shaderGLTF.use();
         shaderGLTF.set("view", view);
         shaderGLTF.set("projection", projection);
@@ -167,9 +170,18 @@ int main()
 
         glm::mat4 base = glm::mat4(1.f);
 
-        cube.draw(shaderGLTF, base);
+        // drawSetting(planeteSetting, shaderGLTF);
+        planetesSetting.drawSetting(shaderGLTF);
 
-        drawSetting(planeteSetting, shaderGLTF);
+        shaderCube.use();
+        shaderCube.set("view", view);
+        shaderCube.set("projection", projection);
+        shaderCube.set("model", model);
+        shaderCube.set("lightColor", lightColor);
+        shaderCube.set("lightPosition", lightPosition);
+        shaderCube.set("camPos", camera.getCoords());
+
+        cube.draw(shaderCube, base);
         // planeteDecor.draw(shaderGLTF, base);
 
         // cube.Draw(shaderGLTF.id());

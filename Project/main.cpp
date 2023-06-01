@@ -4,12 +4,14 @@
 #include "./camera/camera.hpp"
 #include "./include/wrapper.hpp"
 #include "./loaderGLTF/Model.h"
+#include "./loaderGLTF/gltf.hpp"
 #include "./player/player.hpp"
 #include "boids/boids.hpp"
 #include "glimac/default_shader.hpp"
 #include "glm/ext/matrix_clip_space.hpp"
 #include "glm/ext/matrix_transform.hpp"
 #include "glm/fwd.hpp"
+#include "include/setting.hpp"
 #include "p6/p6.h"
 
 void moveListener(const p6::Context& ctx, Player& player)
@@ -85,23 +87,21 @@ int main()
 
     ground.init();
 
+    Gltf planeteSetting("./assets/models/planetesDecor.gltf");
+
+    Gltf cube("./assets/models/cubeDecor.gltf");
+
     /*********************/
 
-    // matrice de projection, permet de delimiter champ qu'on voit, fait perspective
-    // perspective(fov, aspect ratio fenetre,distance min, distance max)
     glm::mat4 projection = glm::perspective(glm::radians(45.f), static_cast<float>(1280) / static_cast<float>(720), 0.001f, 100.0f);
 
-    Camera      camera;
+    Camera camera;
+
     std::string playerFileGLTF = "./assets/models/vaisseauFinal.gltf";
-    // glm::mat4   basePlayer     = glm::mat4(1.f);
-    Player player(playerFileGLTF);
+    Player      player(playerFileGLTF);
 
     glm::vec3 lightColor(1, 0.92, 0.85);
     glm::vec3 lightPosition(0, 100, 0);
-
-    // const size_t    nbSquare   = 50;
-    // const glm::vec2 squareSize = {5, 5};
-    // const float     size       = 1;
 
     scopes    scopes;
     strengths strengths;
@@ -126,31 +126,23 @@ int main()
 
         moveListener(ctx, player);
         player.calcDir();
-
-        shader.use();
-        // envoie matrice au shader
-        shader.set("projection", projection);
-
-        // "world", translation/rotation etc d'un objet
-        // rotate(matrice courante (identité car c'est la 1ère transfo), rotation, axe autour duquel se fait rotation)
-        glm::mat4 model = glm::rotate(glm::mat4(1.0f), glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-
-        // model = glm::translate(model, )
-        // matrice normale, définit où va être cam
-        // lookAt(pos ete, centre d'ou tu regarde, où est le haut)
-        // fc fait en sorte que l'horizon est tjrs droit
         camera.calCoords(player);
 
-        glm::mat4 view = glm::lookAt(camera.getCoords(), player.getPos(), {0, 1, 0});
+        /*********************************
+         * HERE SHOULD COME THE RENDERING CODE
+         *********************************/
+
+        shader.use();
+        shader.set("projection", projection);
+
+        glm::mat4 model = glm::rotate(glm::mat4(1.0f), glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+        glm::mat4 view  = glm::lookAt(camera.getCoords(), player.getPos(), {0, 1, 0});
 
         shader.set("model", model);
         shader.set("view", view);
 
         // ground.update();
         // box.update();
-
-        // pour init model on la met égale à matrice identité
-        // model = glm::mat4(1.0f);
 
         shaderGLTF.use();
         shaderGLTF.set("view", view);
@@ -162,16 +154,17 @@ int main()
 
         player.draw(shaderGLTF);
 
-        // std::cout << boids.getBoids().at(0).getPosition().x << std::endl;
         boids.draw(shaderGLTF);
         boids.update(scopes, strengths);
 
-        // cube.Draw(shaderGLTF.id());
+        glm::mat4 base = glm::mat4(1.f);
 
-        /*********************************
-         * HERE SHOULD COME THE RENDERING CODE
-         *********************************/
-        // glimac::bind_default_shader();
+        cube.draw(shaderGLTF, base);
+
+        drawSetting(planeteSetting, shaderGLTF);
+        // planeteDecor.draw(shaderGLTF, base);
+
+        // cube.Draw(shaderGLTF.id());
 
         /*********************************/
     };

@@ -13,10 +13,10 @@ class Boids {
 private:
     std::vector<Boid> m_boids;
 
-    size_t    m_nbSquare   = 20;
+    size_t    m_nbSquare   = 50;
     glm::vec3 m_squareSize = {0.5f, 0.5f, 0.5f};
     // values = size from the center of the square = total square size /2
-    const float m_size = 0.05;
+    const float m_size = 0.04;
 
     Gltf m_gltf;
 

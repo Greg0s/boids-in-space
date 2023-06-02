@@ -1,34 +1,15 @@
 #include "player.hpp"
-#include "../loaderGLTF/Model.h"
-#include "../loaderGLTF/gltf.hpp"
-#include "glm/fwd.hpp"
-#include "glm/gtx/transform.hpp"
 
 const float rotUnit      = p6::PI / 3;
 const float maxSpeed     = 0.30;
 const float minSpeed     = 0.15;
 const float acceleration = 0.01;
 
-Player::Player(std::string fileGLTF)
+Player::Player(const std::string& fileGLTF)
     : m_rot(0), m_speed(0.04), m_gltf(fileGLTF)
 {
     m_pos = {0.f, 0.01, 0.f};
     m_dir = {0.f, 0.f, 0.f};
-}
-
-glm::vec3 Player::getPos() const
-{
-    return m_pos;
-}
-
-glm::vec3 Player::getDir() const
-{
-    return m_dir;
-}
-
-float Player::getRot() const
-{
-    return m_rot;
 }
 
 void Player::goForward(const p6::Context& ctx)
@@ -95,7 +76,5 @@ void Player::draw(const p6::Shader& shaderGLTF)
     base = glm::rotate(base, p6::PI, glm::vec3(1.0f, 0.0f, 0.0f));
     base = glm::scale(base, glm::vec3(0.05));
 
-    shaderGLTF.set("model", base);
-
-    m_gltf.getModel().Draw(shaderGLTF.id());
+    m_gltf.draw(shaderGLTF, base);
 }

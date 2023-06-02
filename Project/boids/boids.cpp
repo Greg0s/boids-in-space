@@ -2,22 +2,21 @@
 #include "glm/ext/matrix_transform.hpp"
 #include "glm/fwd.hpp"
 
-Boids::Boids(std::string fileGLTF)
-    : m_gltf(fileGLTF)
-{}
-
-glm::vec3 randomPos(glm::vec3 squareSize, float size)
-{
-    float x = p6::random::number(-squareSize.x + size, squareSize.x - size);
-    float y = p6::random::number(-squareSize.y + size, squareSize.y - size);
-    float z = p6::random::number(-squareSize.z + size, squareSize.z - size);
-
-    return glm::vec3{x, y, z};
-}
+Boids::Boids(const std::string& fileGLTF)
+    : m_gltf(fileGLTF) {}
 
 std::vector<Boid> Boids::getBoids()
 {
     return m_boids;
+}
+
+glm::vec3 Boids::randomPos()
+{
+    float x = p6::random::number(-m_squareSize.x + m_size, m_squareSize.x - m_size);
+    float y = p6::random::number(-m_squareSize.y + m_size, m_squareSize.y - m_size);
+    float z = p6::random::number(-m_squareSize.z + m_size, m_squareSize.z - m_size);
+
+    return glm::vec3{x, y, z};
 }
 
 void Boids::init()
@@ -27,10 +26,10 @@ void Boids::init()
     glm::vec3 speed = {0.008, 0.008, 0.008};
 
     // vector<Boid> creation
-    for (size_t i = 0; i < m_nbSquare; i++)
+    for (size_t i = 0; i < m_nbBoids; i++)
     {
         // square appears only in the square = center of the square
-        pos = randomPos(m_squareSize, m_size);
+        pos = randomPos();
         // squares have a random direction
         direction = {p6::random::direction(), 1.};
         // create the boid of the square i
@@ -42,9 +41,6 @@ void Boids::init()
 
 void Boids::draw(const p6::Shader& shaderGLTF)
 {
-    // std::string fileGLTF = "./assets/models/planetesAllegee.gltf";
-    // Model       boidModel(fileGLTF.c_str());
-
     glm::mat4 base;
 
     for (auto& boid : m_boids)
@@ -58,7 +54,7 @@ void Boids::draw(const p6::Shader& shaderGLTF)
     }
 }
 
-void Boids::update(scopes scopes, strengths strengths)
+void Boids::update(scopes& scopes, strengths& strengths)
 {
     for (auto& boid : m_boids)
     {

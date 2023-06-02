@@ -23,16 +23,10 @@ public:
     float     getX() const;
     float     getY() const;
 
-    void draw(const p6::Shader& shaderGLTF);
-
-    void printBoid() const;
-
     void move();
     void inSquare(const glm::vec3& squareSize, const float& size, const float& strength, const float& scope);
 
-    void separationForce(const std::vector<Boid>& boids, float scope, float strength);
+    void separationForce(const std::vector<Boid>& boids, const float& scope, const float& strength);
     void alignementForce(const std::vector<Boid>& boids, const float& scope, const float& strength);
     void cohesionForce(const std::vector<Boid>& boids, const float& scope, const float& strength);
-
-    void draw(const p6::Shader& shaderGLTF) const;
 };

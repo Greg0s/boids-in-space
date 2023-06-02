@@ -1,5 +1,4 @@
 #include "./boid.hpp"
-#include "../loaderGLTF/Model.h"
 #include "glm/ext/matrix_transform.hpp"
 #include "glm/ext/quaternion_geometric.hpp"
 #include "glm/fwd.hpp"
@@ -19,18 +18,11 @@ glm::vec3 Boid::getSpeed() const
     return m_speed;
 }
 
-void Boid::printBoid() const
-{
-    std::cout << "-------BOID----------" << std::endl;
-    std::cout << "Pos: x " << m_pos.x << " y " << m_pos.y << std::endl;
-    std::cout << "Dir: x " << m_dir.x << " y " << m_dir.y << std::endl;
-    std::cout << "v: x " << m_speed.x << " y " << m_speed.y << std::endl;
-}
-
 float Boid::getX() const
 {
     return m_pos.x;
 }
+
 float Boid::getY() const
 {
     return m_pos.y;
@@ -96,7 +88,7 @@ void Boid::inSquare(const glm::vec3& squareSize, const float& size, const float&
     m_dir = glm::normalize(m_dir);
 }
 
-void Boid::separationForce(const std::vector<Boid>& boids, float scope, float strength)
+void Boid::separationForce(const std::vector<Boid>& boids, const float& scope, const float& strength)
 {
     glm::vec3 totalForce = {0., 0., 0.};
     int       count      = 0;
@@ -173,19 +165,3 @@ void Boid::cohesionForce(const std::vector<Boid>& boids, const float& scope, con
         m_dir = glm::normalize(m_dir);
     }
 }
-
-// void Boid::draw(const p6::Shader& shaderGLTF)
-// {
-// std::string fileGLTF = "./assets/models/drone.gltf";
-// Model       boid(fileGLTF.c_str());
-
-// glm::mat4 base = glm::mat4(1.f);
-// base           = glm::translate(base, glm::vec3(m_pos.x, m_pos.y, m_pos.z));
-// //  pour tester que affichage gltf boid fonctionne
-// // base = glm::translate(base, glm::vec3(0.1, 0, 0));
-
-// base = glm::scale(base, glm::vec3(0.008));
-
-// shaderGLTF.set("model", base);
-// boid.Draw(shaderGLTF.id());
-// }

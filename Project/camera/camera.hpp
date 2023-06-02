@@ -10,14 +10,14 @@ private:
     float     m_height   = 0.2;
 
 public:
-    void  setDistance(float dist);
-    float getDistance() const;
-    void  setHeight(float height);
-    float getHeight();
+    float     getDistance() const { return m_distance; };
+    float     getHeight() { return m_coords[2]; };
+    glm::vec3 getCoords() { return m_coords; };
+
+    void setDistance(float& dist);
+    void setHeight(float& height);
+    void calCoords(Player& player);
 
     void further();
     void closer();
-
-    void      calCoords(Player& player);
-    glm::vec3 getCoords();
 };

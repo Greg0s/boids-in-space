@@ -12,22 +12,20 @@
 class Boids {
 private:
     std::vector<Boid> m_boids;
+    size_t            m_nbBoids = 50;   // Number of boids
+    const float       m_size    = 0.04; // Size of each boid
 
-    size_t    m_nbSquare   = 50;
-    glm::vec3 m_squareSize = {0.5f, 0.5f, 0.5f};
-    // values = size from the center of the square = total square size /2
-    const float m_size = 0.04;
+    glm::vec3 m_squareSize = {0.5f, 0.5f, 0.5f}; // Size of container
+    Gltf      m_gltf;
 
-    Gltf m_gltf;
+    glm::vec3 randomPos();
 
 public:
-    Boids(std::string fileGLTF);
-
-    void init();
-
-    void draw(const p6::Shader& shaderGLTF);
-
-    void update(scopes scopes, strengths strengths);
+    Boids(const std::string& fileGLTF);
 
     std::vector<Boid> getBoids();
+
+    void init();
+    void draw(const p6::Shader& shaderGLTF);
+    void update(scopes& scopes, strengths& strengths);
 };

@@ -2,7 +2,6 @@
 #include <fstream>
 #include "./boid/boid.hpp"
 #include "./camera/camera.hpp"
-#include "./include/wrapper.hpp"
 #include "./loaderGLTF/Model.h"
 #include "./loaderGLTF/gltf.hpp"
 #include "./player/player.hpp"
@@ -61,6 +60,8 @@ int main()
 
     glEnable(GL_DEPTH_TEST);
 
+    // Load shaders
+
     const p6::Shader shader = p6::load_shader(
         "shaders/shader.vs.glsl",
         "shaders/shader.fs.glsl"
@@ -76,53 +77,26 @@ int main()
         "shaders/cube.fs.glsl"
     );
 
-    /*********************************
-     * HERE SHOULD COME THE INITIALIZATION CODE
-     *********************************/
+    // Load assets
 
-    Wrapper ground;
-
-    struct Vertex3D g1 = {glm::vec3(0.f, 0.f, 0.f), glm::vec3(1.f, 0.5f, 0.f)};
-    struct Vertex3D g2 = {glm::vec3(-0.5f, 0.f, 0.f), glm::vec3(0.f, 1.f, 0.5f)};
-    struct Vertex3D g3 = {glm::vec3(-0.5f, 0.5f, 0.f), glm::vec3(0.f, 0.5f, 1.f)};
-    struct Vertex3D g4 = {glm::vec3(0.0f, 0.5f, 0.f), glm::vec3(0.f, 0.5f, 1.f)};
-    ground.vertices.push_back(g1);
-    ground.vertices.push_back(g2);
-    ground.vertices.push_back(g3);
-    ground.vertices.push_back(g4);
-
-    ground.indices.push_back(0);
-    ground.indices.push_back(1);
-    ground.indices.push_back(2);
-    ground.indices.push_back(0);
-    ground.indices.push_back(2);
-    ground.indices.push_back(3);
-
-    ground.init();
-
-    // Gltf planeteSetting();
     Setting planetesSetting("./assets/models/planetesDecor.gltf");
 
     Gltf cube("./assets/models/cube.gltf");
 
-    /*********************/
+    Player player("./assets/models/vaisseauFinal.gltf");
 
-    glm::mat4 projection = glm::perspective(glm::radians(45.f), static_cast<float>(1280) / static_cast<float>(720), 0.001f, 100.0f);
-
-    Camera camera;
-
-    std::string playerFileGLTF = "./assets/models/vaisseauFinal.gltf";
-    Player      player(playerFileGLTF);
-
-    glm::vec3 lightColor(1, 0.92, 0.85);
-    glm::vec3 lightPosition(0, 100, 0);
+    Boids boids("./assets/models/planetesBoids.gltf");
+    boids.init();
 
     scopes    scopes;
     strengths strengths;
 
-    std::string boidsFileGLTF = "./assets/models/planetesBoids.gltf";
-    Boids       boids(boidsFileGLTF);
-    boids.init();
+    Camera camera;
+
+    glm::vec3 lightColor(1, 0.92, 0.85);
+    glm::vec3 lightPosition(0, 100, 0);
+
+    glm::mat4 projection = glm::perspective(glm::radians(45.f), static_cast<float>(1280) / static_cast<float>(720), 0.001f, 100.0f);
 
     // Declare your infinite update loop.
     ctx.update = [&]() {
@@ -142,18 +116,8 @@ int main()
         player.calcDir();
         camera.calCoords(player);
 
-        /*********************************
-         * HERE SHOULD COME THE RENDERING CODE
-         *********************************/
-
-        shader.use();
-        shader.set("projection", projection);
-
         glm::mat4 model = glm::rotate(glm::mat4(1.0f), glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
         glm::mat4 view  = glm::lookAt(camera.getCoords(), player.getPos(), {0, 1, 0});
-
-        shader.set("model", model);
-        shader.set("view", view);
 
         shaderGLTF.use();
         shaderGLTF.set("view", view);
@@ -168,28 +132,15 @@ int main()
         boids.draw(shaderGLTF);
         boids.update(scopes, strengths);
 
-        glm::mat4 base = glm::mat4(1.f);
-
-        // drawSetting(planeteSetting, shaderGLTF);
         planetesSetting.drawSetting(shaderGLTF);
 
         shaderCube.use();
         shaderCube.set("view", view);
         shaderCube.set("projection", projection);
         shaderCube.set("model", model);
-        shaderCube.set("lightColor", lightColor);
-        shaderCube.set("lightPosition", lightPosition);
-        shaderCube.set("camPos", camera.getCoords());
 
-        cube.draw(shaderCube, base);
-        // planeteDecor.draw(shaderGLTF, base);
-
-        // cube.Draw(shaderGLTF.id());
-
-        /*********************************/
+        cube.draw(shaderCube, glm::mat4(1.f));
     };
 
-    // Should be done last. It starts the infinite loop.
     ctx.start();
-    // triangle.clear();
 }

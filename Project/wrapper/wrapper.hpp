@@ -25,9 +25,6 @@ public:
         glDeleteVertexArrays(1, &vao);
     };
     void update();
-    // void draw();
-    void print();
-    // void clear();
 };
 
 void Wrapper::init()
@@ -64,33 +61,12 @@ void Wrapper::init()
     glBindVertexArray(0);
 }
 
-// void Wrapper::draw()
-// {
-//     glDrawArrays(GL_TRIANGLES, 0, vertices.size());
-// }
-
 void Wrapper::update()
 {
-    // glClearColor(1.f, 0.5f, 0.5f, 1.f); // background color
-
     glClear(GL_COLOR_BUFFER_BIT);
 
     glBindVertexArray(vao);
-    //    glDrawArrays(GL_TRIANGLES, 0, vertices.size());
     glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
 
     glBindVertexArray(0);
 }
-
-void Wrapper::print()
-{
-    std::cout << "vao:" << vao << std::endl;
-    std::cout << "vbo:" << vbo << std::endl;
-    std::cout << "vertices:" << vertices.at(1).coords[0] << std::endl;
-}
-
-// void Wrapper::clear()
-// {
-//     glDeleteBuffers(1, &vbo);
-//     glDeleteVertexArrays(1, &vao);
-// }

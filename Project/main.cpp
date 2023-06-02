@@ -120,7 +120,7 @@ int main()
     scopes    scopes;
     strengths strengths;
 
-    std::string boidsFileGLTF = "./assets/models/planetesAllegee.gltf";
+    std::string boidsFileGLTF = "./assets/models/planetesBoids.gltf";
     Boids       boids(boidsFileGLTF);
     boids.init();
 

@@ -1,8 +1,8 @@
 #pragma once
 
-#include "p6/p6.h"
 #include <glm/glm.hpp>
 #include <vector>
+#include "p6/p6.h"
 
 // Structure to standardize the vertices used in the meshes
 struct Vertex {

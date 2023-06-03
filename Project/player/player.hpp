@@ -10,7 +10,6 @@ private:
     glm::vec3 m_dir;
 
     float m_rot;
-
     float m_speed;
 
     Gltf m_gltf;

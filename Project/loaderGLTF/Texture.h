@@ -1,13 +1,9 @@
 #pragma once
 #include "p6/p6.h"
 
-// #include <stb/stb_image.h>
-
-// #include "shaderClass.h"
-
 class Texture {
 public:
-    GLuint ID;
+    GLuint      ID;
     const char* type;
 
     Texture(const char* image, const char* texType);

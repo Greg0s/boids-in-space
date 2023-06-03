@@ -99,7 +99,7 @@ int main()
     glm::vec3 lightColor2(0, 0.5, 0.8);
     glm::vec3 lightPosition2(60, -100, 50);
 
-    /////// Failed to implement spotlight
+    /////// Try to implement spotlight
     // glm::vec3 spotColor(1, 0., 0.);
     // float     spotCutOff(glm::cos(glm::radians(5.f)));
 
@@ -141,7 +141,7 @@ int main()
         shaderGLTF.set("lightColor2", lightColor2);
         shaderGLTF.set("lightPosition2", lightPosition2);
 
-        /////// Failed to implement spotlight
+        /////// Try to implement spotlight
         // shaderGLTF.set("spotColor", spotColor);
         // shaderGLTF.set("spotPosition", spotPosition);
         // shaderGLTF.set("spotDirection", spotDirection);

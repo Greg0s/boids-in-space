@@ -65,7 +65,7 @@ vec4 direcLight()
 	// float theta = dot((lightDirSpotMesh), normalize(spotDirection));
 
 	// if (theta > spotCutOff){
-	// 	return (texture(diffuse0, texCoord) * (diffuse + ambient) + 1.0 * specular) * vec4(lightColor,1.0) + 0.5 * vec4(spotColor, 1.0);
+	// 	return (texture(diffuse0, texCoord) * (diffuse1 + ambient) + 1.0 * specular1) * vec4(lightColor1,1.0) + 0.5 * vec4(spotColor, 1.0);
 	// }
 	return 0.8 * (texture(diffuse0, texCoord) * (diffuse1 + ambient) + specular1 ) * vec4(lightColor1, 1.0) +  (texture(diffuse0, texCoord) * (diffuse2 + ambient) + specular2) * vec4(lightColor2, 1.0);
 }

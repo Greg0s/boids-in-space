@@ -93,8 +93,15 @@ int main()
 
     Camera camera;
 
-    glm::vec3 lightColor(1, 0.92, 0.85);
-    glm::vec3 lightPosition(0, 100, 0);
+    glm::vec3 lightColor1(1, 1, 1);
+    glm::vec3 lightPosition1(-50, -100, 30);
+
+    glm::vec3 lightColor2(0, 0.5, 0.8);
+    glm::vec3 lightPosition2(60, -100, 50);
+
+    /////// Failed to implement spotlight
+    // glm::vec3 spotColor(1, 0., 0.);
+    // float     spotCutOff(glm::cos(glm::radians(5.f)));
 
     glm::mat4 projection = glm::perspective(glm::radians(45.f), static_cast<float>(1280) / static_cast<float>(720), 0.001f, 100.0f);
 
@@ -116,6 +123,9 @@ int main()
         player.calcDir();
         camera.calCoords(player);
 
+        glm::vec3 spotPosition(player.getPos());
+        glm::vec3 spotDirection(-player.getDir().x, 0, player.getDir().z);
+
         glm::mat4 model = glm::rotate(glm::mat4(1.0f), glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
         glm::mat4 view  = glm::lookAt(camera.getCoords(), player.getPos(), {0, 1, 0});
 
@@ -123,9 +133,19 @@ int main()
         shaderGLTF.set("view", view);
         shaderGLTF.set("projection", projection);
         shaderGLTF.set("model", model);
-        shaderGLTF.set("lightColor", lightColor);
-        shaderGLTF.set("lightPosition", lightPosition);
         shaderGLTF.set("camPos", camera.getCoords());
+
+        shaderGLTF.set("lightColor1", lightColor1);
+        shaderGLTF.set("lightPosition1", lightPosition1);
+
+        shaderGLTF.set("lightColor2", lightColor2);
+        shaderGLTF.set("lightPosition2", lightPosition2);
+
+        /////// Failed to implement spotlight
+        // shaderGLTF.set("spotColor", spotColor);
+        // shaderGLTF.set("spotPosition", spotPosition);
+        // shaderGLTF.set("spotDirection", spotDirection);
+        // shaderGLTF.set("spotCutOff", spotCutOff);
 
         player.draw(shaderGLTF);
 
